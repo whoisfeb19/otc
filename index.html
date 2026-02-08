@@ -26,8 +26,17 @@
         .platform { background: var(--accent); color: #000; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
         .price-tag { background: #ff6b00; color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-left: 8px; }
         .price-free { background: #00b894; }
-        .btn-dl { display: block; border: 2px solid var(--accent); color: var(--accent); text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        .btn-dl { display: block; border: 2px solid var(--accent); color: var(--accent); text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; transition: 0.3s; cursor: pointer; }
         .btn-dl:hover { background: var(--accent); color: #000; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 15px; border: 2px solid var(--accent); width: 90%; max-width: 400px; }
+        .modal-content h2 { color: var(--accent); margin-top: 0; }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #0b0e14; color: #fff; box-sizing: border-box; }
+        .modal-content button { width: 100%; padding: 12px; background: var(--accent); border: none; color: #000; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; }
+        .modal-content button:hover { opacity: 0.8; }
+        .close-modal { color: var(--accent); float: right; font-size: 28px; cursor: pointer; }
+        .close-modal:hover { color: #fff; }
     </style>
 </head>
 <body>
@@ -44,9 +53,84 @@
     <div id="modGrid" class="grid">Memuat Database... ⏳</div>
 </div>
 
+<!-- Modal Buy -->
+<div id="buyModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeBuyModal()">&times;</span>
+        <h2>🛒 PURCHASE</h2>
+        <input type="text" id="buyNama" placeholder="Nama Lengkap" required>
+        <input type="text" id="buyDiscord" placeholder="Username Discord" required>
+        <input type="text" id="buyFile" placeholder="File" readonly>
+        <input type="text" id="buyHarga" placeholder="Harga" readonly>
+        <textarea id="buyInfo" placeholder="Informasi tambahan (optional)" style="resize: none; height: 60px;"></textarea>
+        <button onclick="sendToDiscord()">💰 KIRIM PEMBAYARAN</button>
+    </div>
+</div>
+
 <script>
     // Link CSV Anda sudah benar, pastikan Spreadsheet-nya masih di-publish ke Web
     const csvURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQDRJ17ZZZahiwECXbmCf5xG6VgsbUZrIoI7gsRuFijxwe_d0iaytC3dT57O9qkR3lLP7xgmJfMA8S9/pub?gid=0&single=true&output=csv';
+
+    // GANTI DENGAN WEBHOOK URL ANDA
+    const DISCORD_WEBHOOK = 'https://discordapp.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN';
+    const DISCORD_SERVER = 'https://discord.gg/KODE_INVITE';
+
+    function openBuyModal(namaFile, harga) {
+        document.getElementById('buyFile').value = namaFile;
+        document.getElementById('buyHarga').value = harga;
+        document.getElementById('buyNama').value = '';
+        document.getElementById('buyDiscord').value = '';
+        document.getElementById('buyInfo').value = '';
+        document.getElementById('buyModal').classList.add('active');
+    }
+
+    function closeBuyModal() {
+        document.getElementById('buyModal').classList.remove('active');
+    }
+
+    async function sendToDiscord() {
+        const nama = document.getElementById('buyNama').value.trim();
+        const discord = document.getElementById('buyDiscord').value.trim();
+        const file = document.getElementById('buyFile').value;
+        const harga = document.getElementById('buyHarga').value;
+        const info = document.getElementById('buyInfo').value;
+
+        if (!nama || !discord) {
+            alert('Isi Nama dan Username Discord!');
+            return;
+        }
+
+        try {
+            const embed = {
+                title: '💰 PURCHASE NOTIFIKASI',
+                description: `User baru ingin membeli: **${file}**`,
+                color: 16776960,
+                fields: [
+                    { name: '👤 Nama', value: nama, inline: true },
+                    { name: '🎮 Discord', value: discord, inline: true },
+                    { name: '📦 File', value: file, inline: false },
+                    { name: '💵 Harga', value: harga, inline: true },
+                    { name: '📝 Info', value: info || 'Tidak ada', inline: false }
+                ],
+                footer: { text: 'OTC MOD HUB' }
+            };
+
+            const response = await fetch(DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ embeds: [embed] })
+            });
+
+            if (response.ok) {
+                alert('✅ Pesanan terkirim! Silahkan tunggu konfirmasi di Discord.\n\nBergabung ke server: ' + DISCORD_SERVER);
+                closeBuyModal();
+            } else {
+                alert('❌ Gagal mengirim pesanan. Coba lagi!');
+            }
+        } catch (e) {
+            alert('❌ Error: ' + e.message);
+        }
+    }
 
     // Fungsi untuk convert Google Drive link ke format download
     function convertDriveLink(url) {
@@ -111,7 +195,7 @@
                         </div>
                         <h3 style="margin:10px 0 5px; font-size:18px;">${nama}</h3>
                         <p style="font-size:13px; color:#aaa; margin-bottom:15px; height:40px; overflow:hidden;">${desc}</p>
-                        <a href="${link}" class="btn-dl" target="_blank">DOWNLOAD</a>
+                        ${price === 'Free' ? `<a href="${link}" class="btn-dl" download target="_blank">⬇️ DOWNLOAD</a>` : `<button class="btn-dl" onclick="openBuyModal('${nama}', '${price}')">🛒 BUY</button>`}
                     </div>
                 </div>`;
             });
