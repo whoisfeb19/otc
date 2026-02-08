@@ -135,7 +135,10 @@
                 })
             });
 
-            if (!response.ok) return;
+            if (!response.ok) {
+                console.error('Token response not ok:', await response.text());
+                return;
+            }
 
             const data = await response.json();
             
@@ -154,9 +157,12 @@
                 body: JSON.stringify({ access_token: data.access_token })
             });
 
+            // Simpan user data
             currentUser = { id: userData.id, username: userData.username, avatar: userData.avatar };
             localStorage.setItem('otc_user', JSON.stringify(currentUser));
             updateLoginUI();
+            
+            // Clear URL dan reload
             window.history.replaceState({}, document.title, window.location.pathname);
             
             // Jika ada pending buy, buka modal otomatis
@@ -164,7 +170,6 @@
             if (pendingBuy) {
                 const { namaFile, harga } = JSON.parse(pendingBuy);
                 localStorage.removeItem('otc_pending_buy');
-                // Tunggu sebentar agar currentUser siap
                 setTimeout(() => openBuyModal(namaFile, harga), 100);
             }
         } catch (e) {
@@ -324,7 +329,7 @@
         }
     }
     loadMods();
-    initAuth(); // Initialize authentication
+    initAuth(); // Initialize authentication - harus di akhir setelah semua function terdefinisi
 </script>
 </body>
 </html>
