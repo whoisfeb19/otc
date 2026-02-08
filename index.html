@@ -241,8 +241,17 @@
         });
 
         if (response.ok) {
-            alert('✅ Pembayaran diterima!\n\n📌 User: ' + currentUser.username + '\n💎 Tunggu admin memberikan akses.');
-            closeBuyModal();
+            // Tampilkan notif success
+            const userConfirmed = confirm('✅ Pembayaran diterima!\n\n📌 User: ' + currentUser.username + '\n\n💎 Klik OK untuk bergabung ke Discord server');
+            
+            // Jika user klik OK, redirect ke Discord
+            if (userConfirmed) {
+                closeBuyModal();
+                // Buka Discord server di tab baru atau sama
+                window.location.href = DISCORD_SERVER;
+            } else {
+                closeBuyModal();
+            }
         } else {
             alert('❌ Gagal mengirim. Coba lagi!');
         }
