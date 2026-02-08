@@ -72,8 +72,8 @@
     const csvURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQDRJ17ZZZahiwECXbmCf5xG6VgsbUZrIoI7gsRuFijxwe_d0iaytC3dT57O9qkR3lLP7xgmJfMA8S9/pub?gid=0&single=true&output=csv';
 
     // GANTI DENGAN WEBHOOK URL ANDA
-    const DISCORD_WEBHOOK = 'https://discordapp.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN';
-    const DISCORD_SERVER = 'https://discord.gg/KODE_INVITE';
+    const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1469889941294284800/SHnWvh7CipEAgSWiRgKkHOS4C0xWtvtEJ-aUTQO3iIGhu9uKwB3ez6Vk7YNJ3C5owP2G';
+    const DISCORD_SERVER = 'https://discord.gg/QFutgE9DnU';
 
     function openBuyModal(namaFile, harga) {
         document.getElementById('buyFile').value = namaFile;
@@ -163,7 +163,7 @@
                 const plat = col[2].replace(/"/g, "").trim();
                 const prev = col[3].replace(/"/g, "").trim();
                 let link = col[4].replace(/"/g, "").trim();
-                const price = col[5] ? col[5].replace(/"/g, "").trim() : "Free";
+                const price = (col[5] ? col[5].replace(/"/g, "").trim() : "") || "Free";
                 link = convertDriveLink(link);
 
                 let media = '';
