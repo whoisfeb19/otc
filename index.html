@@ -1,105 +1,103 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Videotron Viewer (Firebase, Anti-delay)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <style>
-    html, body {
-      height: 100%;
-      width: 100%;
-      margin: 0; padding: 0; overflow: hidden;
-      background: #111; color: #fff; font-family: Arial, sans-serif;
-    }
-    body {
-      width: 100vw; height: 100vh;
-      display: flex; justify-content: center; align-items: center; text-align: center;
-    }
-    #konten {
-      width: 100vw; height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    img, video {
-      max-width: 100vw; max-height: 100vh;
-      width: 100vw; height: 100vh;
-      object-fit: contain; border-radius: 0; background: #111; margin: 0; display: block;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    img.show, video.show, .teks.show {
-      opacity: 1;
-      transition: opacity 0.4s;
-    }
-    .teks {
-      font-size: 6vw; color: #fff; width: 100vw;
-      display: flex; align-items: center; justify-content: center;
-      height: 100vh; word-break: break-word; white-space: pre-line;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    @media (max-aspect-ratio: 4/3) {
-      .teks { font-size: 8vw; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTC MOD HUB</title>
+    <!-- PERBAIKAN: Link font & ikon yang benar agar tidak kena blokir CORB -->
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com">
+    <style>
+        :root { --accent: #00d2ff; --bg: #0b0e14; --card: #161b22; }
+        body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; }
+        header { text-align: center; padding: 60px 20px; border-bottom: 2px solid var(--accent); background: #000; }
+        h1 { font-family: 'Orbitron'; font-size: 3rem; color: var(--accent); margin: 0; text-transform: uppercase; }
+        .social-container { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .btn-social { padding: 10px 20px; border-radius: 50px; text-decoration: none; color: #fff; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .btn-yt:hover { background: #ff0000; border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+        .btn-dc:hover { background: #7289da; border-color: #7289da; box-shadow: 0 0 15px #7289da; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .card { background: var(--card); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .preview { width: 100%; height: 180px; background: #000; }
+        .preview iframe, .preview img { width: 100%; height: 100%; border: none; object-fit: cover; }
+        .content { padding: 20px; }
+        .platform { background: var(--accent); color: #000; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .btn-dl { display: block; border: 2px solid var(--accent); color: var(--accent); text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        .btn-dl:hover { background: var(--accent); color: #000; }
+    </style>
 </head>
 <body>
-  <div id="konten"></div>
-  <script>
-    // Konfigurasi Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAOT6Kdmr2xz1Sp3P-7XNixeYyv8acrfzY",
-      authDomain: "operator-ef267.firebaseapp.com",
-      databaseURL: "https://operator-ef267-default-rtdb.firebaseio.com",
-      projectId: "operator-ef267",
-      storageBucket: "operator-ef267.appspot.com",
-      messagingSenderId: "479580916671",
-      appId: "1:479580916671:web:cd1b4de2573c353fb22f0a"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
 
-    // Data cache, anti race condition
-    let kontens = [];
-    let aktifId = "";
+<header>
+    <h1>OTC MOD</h1>
+    <div class="social-container">
+        <a href="https://youtube.com" class="btn-social btn-yt" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+        <a href="https://discord.gg" class="btn-social btn-dc" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+    </div>
+</header>
 
-    function renderKontenAktif() {
-      const el = document.getElementById('konten');
-      el.innerHTML = '';
-      // Cari konten aktif yang tidak hidden
-      const k = (kontens||[]).find(x=>String(x.id) === String(aktifId) && (!x.hidden));
-      if (!k) {
-        el.innerHTML = '<i style="font-size:3vw">Break dulu ya, biar semangat PKKMB ini nggak berubah jadi Pelatihan Kuat-Kuat Menahan Bosan</i>';
-        return;
-      }
-      let html = '';
-      if (k.jenis === 'teks') {
-        html = `<div class="teks">${k.isi}</div>`;
-      } else if (k.jenis === 'gambar') {
-        html = `<img src="${k.isi}" alt="${k.judul || ''}" loading="lazy">`;
-      } else if (k.jenis === 'video') {
-        html = `<video src="${k.isi}" autoplay loop controls muted></video>`;
-      }
-      el.innerHTML = html;
-      // Fade in effect untuk tampilan halus
-      setTimeout(() => {
-        const isi = el.firstElementChild;
-        if (isi) isi.classList.add('show');
-      }, 10);
+<div class="container">
+    <div id="modGrid" class="grid">Memuat Database... ⏳</div>
+</div>
+
+<script>
+    // Link CSV Anda sudah benar, pastikan Spreadsheet-nya masih di-publish ke Web
+    const csvURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQDRJ17ZZZahiwECXbmCf5xG6VgsbUZrIoI7gsRuFijxwe_d0iaytC3dT57O9qkR3lLP7xgmJfMA8S9/pub?gid=0&single=true&output=csv';
+
+    async function loadMods() {
+        const grid = document.getElementById('modGrid');
+        try {
+            const r = await fetch(csvURL);
+            if (!r.ok) throw new Error('Gagal fetch');
+            const d = await r.text();
+            const rows = d.split('\n').slice(1);
+            grid.innerHTML = '';
+
+            rows.forEach(row => {
+                const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if(col.length < 5) return;
+
+                const nama = col[0].replace(/"/g, "").trim();
+                const desc = col[1].replace(/"/g, "").trim();
+                const plat = col[2].replace(/"/g, "").trim();
+                const prev = col[3].replace(/"/g, "").trim();
+                const link = col[4].replace(/"/g, "").trim();
+
+                let media = '';
+                // PERBAIKAN: Logika penentuan Video ID dan format link Embed
+                if (prev.includes('youtube.com') || prev.includes('youtu.be')) {
+                    let videoId = "";
+                    if (prev.includes('v=')) {
+                        videoId = prev.split('v=')[1].split('&')[0];
+                    } else {
+                        videoId = prev.split('/').pop().split('?')[0];
+                    }
+                    media = `<iframe src="https://www.youtube.com{videoId}" allowfullscreen></iframe>`;
+                } else {
+                    media = `<img src="${prev}" onerror="this.src='https://placehold.co'">`;
+                }
+
+                // Menggunakan backtick ( ` ) untuk membungkus HTML
+                grid.innerHTML += `
+                <div class="card">
+                    <div class="preview">${media}</div>
+                    <div class="content">
+                        <span class="platform">${plat}</span>
+                        <h3 style="margin:10px 0 5px; font-size:18px;">${nama}</h3>
+                        <p style="font-size:13px; color:#aaa; margin-bottom:15px; height:40px; overflow:hidden;">${desc}</p>
+                        <a href="${link}" class="btn-dl" target="_blank">DOWNLOAD</a>
+                    </div>
+                </div>`;
+            });
+            if(grid.innerHTML === "") grid.innerHTML = "Database kosong.";
+        } catch(e) {
+            grid.innerHTML = "Gagal memuat data. Pastikan link Google Sheets sudah di-'Publish to the web'.";
+            console.error(e);
+        }
     }
-
-    // Listener kontens, hanya update data cache
-    db.ref("videotron/kontens").on("value", snap => {
-      kontens = snap.val() || [];
-      // Jika aktifId sudah ada, langsung render konten aktif (anti delay)
-      if (aktifId) renderKontenAktif();
-    });
-    // Listener konten aktif, setiap berubah langsung render (anti delay)
-    db.ref("videotron/kontenAktifId").on("value", snap => {
-      aktifId = snap.val() || "";
-      renderKontenAktif();
-    });
-  </script>
+    loadMods();
+</script>
 </body>
 </html>
