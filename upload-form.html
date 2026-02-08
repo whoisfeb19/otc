@@ -27,27 +27,60 @@
     <p id="status" style="text-align:center; color:#00ffcc"></p>
   </div>
   <script>
-    function proses() {
-      const f = document.getElementById('file').files[0];
-      if(!f) return alert("Pilih file!");
-      const r = new FileReader();
-      r.onload = function(e) {
-        const obj = {
-          namaMod: document.getElementById('nama').value,
-          deskripsi: document.getElementById('desc').value || "-",
-          platform: document.getElementById('platform').value,
-          linkPreview: document.getElementById('preview').value,
-          price: document.getElementById('price').value || "Free",
-          fileMod: { contents: Array.from(new Uint8Array(e.target.result)), name: f.name, mimeType: f.type }
-        };
-        document.getElementById('status').innerText = "Sedang Upload...";
-        google.script.run.withSuccessHandler(msg => {
-          document.getElementById('status').innerText = msg;
-          document.querySelectorAll('input, textarea').forEach(el => el.value = "");
-        }).uploadFile(obj);
+  function proses() {
+    const fileInput = document.getElementById('file');
+    const f = fileInput.files[0];
+    
+    if (!f) return alert("Pilih file dulu, ya!");
+
+    // 1. Ambil semua nilai input ke dalam variabel terlebih dahulu
+    const nama = document.getElementById('nama').value.trim();
+    const deskripsi = document.getElementById('desc').value.trim() || "-";
+    const platform = document.getElementById('platform').value;
+    const preview = document.getElementById('preview').value.trim();
+    const hargaInput = document.getElementById('price').value.trim();
+    
+    // 2. Logika penentuan harga: Jika kosong maka "Free"
+    const hargaFinal = hargaInput !== "" ? hargaInput : "Free";
+
+    const r = new FileReader();
+    document.getElementById('status').innerText = "Sedang memproses file...";
+
+    r.onload = function(e) {
+      const obj = {
+        namaMod: nama,
+        deskripsi: deskripsi,
+        platform: platform,
+        linkPreview: preview,
+        price: hargaFinal, // Menggunakan variabel hargaFinal yang sudah kita cek
+        fileMod: { 
+          contents: Array.from(new Uint8Array(e.target.result)), 
+          name: f.name, 
+          mimeType: f.type 
+        }
       };
-      r.readAsArrayBuffer(f);
-    }
-  </script>
+
+      document.getElementById('status').innerText = "Sedang Upload ke Server...";
+
+      google.script.run
+        .withSuccessHandler(msg => {
+          document.getElementById('status').innerText = msg;
+          // Reset semua form input setelah berhasil
+          document.getElementById('nama').value = "";
+          document.getElementById('desc').value = "";
+          document.getElementById('preview').value = "";
+          document.getElementById('price').value = "";
+          fileInput.value = ""; 
+        })
+        .withFailureHandler(err => {
+          document.getElementById('status').innerText = "Gagal: " + err;
+        })
+        .uploadFile(obj);
+    };
+    
+    r.readAsArrayBuffer(f);
+  }
+</script>
+
 </body>
 </html>
