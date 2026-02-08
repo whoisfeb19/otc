@@ -131,12 +131,12 @@
                     code: code,
                     grant_type: 'authorization_code',
                     redirect_uri: DISCORD_REDIRECT_URI,
-                    scope: 'identify guilds.join'
+                    scope: 'identify'
                 })
             });
 
             if (!response.ok) {
-                console.error('Token response not ok:', await response.text());
+                console.error('Token response error:', await response.text());
                 return;
             }
 
@@ -146,23 +146,19 @@
                 headers: { 'Authorization': `Bearer ${data.access_token}` }
             });
 
+            if (!userResponse.ok) {
+                console.error('User fetch error:', await userResponse.text());
+                return;
+            }
+
             const userData = await userResponse.json();
             
-            await fetch(`https://discord.com/api/v10/guilds/${GUILD_ID}/members/${userData.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bot ${BOT_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ access_token: data.access_token })
-            });
-
-            // Simpan user data
+            // Simpan user data ke localStorage
             currentUser = { id: userData.id, username: userData.username, avatar: userData.avatar };
             localStorage.setItem('otc_user', JSON.stringify(currentUser));
             updateLoginUI();
             
-            // Clear URL dan reload
+            // Clear URL
             window.history.replaceState({}, document.title, window.location.pathname);
             
             // Jika ada pending buy, buka modal otomatis
@@ -170,7 +166,7 @@
             if (pendingBuy) {
                 const { namaFile, harga } = JSON.parse(pendingBuy);
                 localStorage.removeItem('otc_pending_buy');
-                setTimeout(() => openBuyModal(namaFile, harga), 100);
+                setTimeout(() => openBuyModal(namaFile, harga), 500);
             }
         } catch (e) {
             console.error('OAuth error:', e);
