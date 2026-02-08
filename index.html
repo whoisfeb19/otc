@@ -74,7 +74,7 @@
                     } else {
                         videoId = prev.split('/').pop().split('?')[0];
                     }
-                    media = `<iframe src="https://www.youtube.com{videoId}" allowfullscreen></iframe>`;
+                    media = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
                 } else {
                     media = `<img src="${prev}" onerror="this.src='https://placehold.co'">`;
                 }
