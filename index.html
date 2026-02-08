@@ -7,7 +7,6 @@
     <!-- PERBAIKAN: Link font & ikon yang benar agar tidak kena blokir CORB -->
     <link href="https://fonts.googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com">
-    <script type="module" src="/path/to/your/bundle.js"></script>
     <style>
         :root { --accent: #00d2ff; --bg: #0b0e14; --card: #161b22; }
         body { 
@@ -102,13 +101,13 @@
     // Link CSV Anda sudah benar, pastikan Spreadsheet-nya masih di-publish ke Web
     const csvURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQDRJ17ZZZahiwECXbmCf5xG6VgsbUZrIoI7gsRuFijxwe_d0iaytC3dT57O9qkR3lLP7xgmJfMA8S9/pub?gid=0&single=true&output=csv';
 
-    // GANTI DENGAN DATA ANDA
-    const DISCORD_WEBHOOK = import.meta.env.VITE_DISCORD_WEBHOOK
-    const DISCORD_SERVER = 'https://discord.gg/QFutgE9DnU'; // Ini publik, tidak apa-apa
-    const DISCORD_CLIENT_ID = '1401008497793040394';
-    const DISCORD_REDIRECT_URI = 'https://otc-official.netlify.app';
-    const GUILD_ID = process.env.GUILD_ID;
-    const BOT_TOKEN = process.env.BOT_TOKEN;
+    // Gunakan process.env untuk mengambil data dari Netlify
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
+const DISCORD_SERVER = 'https://discord.gg/QFutgE9DnU'; // Ini aman untuk di-hardcode
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const DISCORD_REDIRECT_URI = 'https://otc-official.netlify.app';
+const GUILD_ID = process.env.GUILD_ID;
+const BOT_TOKEN = process.env.BOT_TOKEN;
 
     
     let currentUser = null;

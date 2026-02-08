@@ -1,13 +1,2 @@
-# Mengabaikan file lingkungan yang berisi rahasia
 .env
-
-# Mengabaikan folder library/dependensi umum (jika menggunakan npm)
 node_modules/
-
-# Mengabaikan file hasil build/dist
-dist/
-build/
-
-# Mengabaikan file sistem operasi
-.DS_Store
-Thumbs.db
