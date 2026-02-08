@@ -79,10 +79,10 @@
 <div id="loginModal" class="modal login-modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-        <h2>🔐 LOGIN DIPERLUKAN</h2>
-        <p>Silahkan login dengan Discord untuk melanjutkan pembelian.</p>
-        <p style="font-size: 14px; color: #888;">Anda akan diverifikasi sebagai member resmi kami.</p>
-        <button class="btn-login" onclick="proceedToDiscordLogin()">🎮 LOGIN DENGAN DISCORD</button>
+        <h2>🔐 LOGIN REQUIRED</h2>
+        <p>Please log in with Discord to continue with your purchase.</p>
+        <p style="font-size: 14px; color: #888;">You will be verified as our official member..</p>
+        <button class="btn-login" onclick="proceedToDiscordLogin()">🎮 LOGIN WITH DISCORD</button>
     </div>
 </div>
 
@@ -91,12 +91,12 @@
     <div class="modal-content">
         <span class="close-modal" onclick="closeBuyModal()">&times;</span>
         <h2>🛒 PURCHASE</h2>
-        <input type="text" id="buyNama" placeholder="Nama Lengkap" required>
+        <input type="text" id="buyNama" placeholder="Your Name" required>
         <input type="text" id="buyDiscord" placeholder="Discord Username" readonly>
         <input type="text" id="buyFile" placeholder="File" readonly>
-        <input type="text" id="buyHarga" placeholder="Harga" readonly>
-        <textarea id="buyInfo" placeholder="Informasi tambahan (optional)" style="resize: none; height: 60px;"></textarea>
-        <button onclick="sendToDiscord()">💰 KIRIM PEMBAYARAN</button>
+        <input type="text" id="buyHarga" placeholder="Price" readonly>
+        <textarea id="buyInfo" placeholder="Additional information (optional)" style="resize: none; height: 60px;"></textarea>
+        <button onclick="sendToDiscord()">💰 SEND ORDER</button>
     </div>
 </div>
 
@@ -339,7 +339,7 @@ const BOT_TOKEN = 'BOT_TOKEN_PLACEHOLDER';
                         </div>
                         <h3 style="margin:10px 0 5px; font-size:18px;">${nama}</h3>
                         <p style="font-size:13px; color:#aaa; margin-bottom:15px; height:40px; overflow:hidden;">${desc}</p>
-                        ${price === 'Free' ? `<a href="${link}" class="btn-dl" download target="_blank">⬇️ DOWNLOAD</a>` : `<button class="btn-dl" onclick="openBuyModal('${nama}', '${price}')">🛒 BUY</button>`}
+                        ${price === 'Free' ? `<a href="${link}" class="btn-dl" download target="_blank">⬇️ DOWNLOAD</a>` : `<button class="btn-dl" onclick="openBuyModal('${nama}', '${price}')">🛒 ORDER</button>`}
                     </div>
                 </div>`;
             });
