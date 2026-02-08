@@ -89,50 +89,48 @@
     }
 
     async function sendToDiscord() {
-        const nama = document.getElementById('buyNama').value.trim();
-        const discord = document.getElementById('buyDiscord').value.trim();
-        const file = document.getElementById('buyFile').value;
-        const harga = document.getElementById('buyHarga').value;
-        const info = document.getElementById('buyInfo').value;
+    const nama = document.getElementById('buyNama').value.trim();
+    const discord = document.getElementById('buyDiscord').value.trim();
+    const file = document.getElementById('buyFile').value;
+    const harga = document.getElementById('buyHarga').value;
+    const info = document.getElementById('buyInfo').value;
 
-        if (!nama || !discord) {
-            alert('Isi Nama dan Username Discord!');
-            return;
-        }
-
-        try {
-            const embed = {
-                title: '💰 PURCHASE NOTIFIKASI',
-                description: `User baru ingin membeli: **${file}**`,
-                color: 16776960,
-                fields: [
-                    { name: '👤 Nama', value: nama, inline: true },
-                    { name: '🎮 Discord', value: discord, inline: true },
-                    { name: '📦 File', value: file, inline: false },
-                    { name: '💵 Harga', value: harga, inline: true },
-                    { name: '📝 Info', value: info || 'Tidak ada', inline: false }
-                ],
-                footer: { text: 'OTC MOD HUB' }
-            };
-
-            const response = await fetch(DISCORD_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ embeds: [embed] })
-            });
-
-            if (response.ok) {
-                alert('✅ Pesanan terkirim! Membuka Discord server...');
-                closeBuyModal();
-                // Redirect ke Discord server
-                window.open(DISCORD_SERVER, '_blank');
-            } else {
-                alert('❌ Gagal mengirim pesanan. Coba lagi!');
-            }
-        } catch (e) {
-            alert('❌ Error: ' + e.message);
-        }
+    if (!nama || !discord) {
+        alert('Isi Nama dan Username Discord!');
+        return;
     }
+
+    try {
+        const embed = {
+            title: '💰 PURCHASE NOTIFIKASI',
+            description: `User baru ingin membeli: **${file}**`,
+            color: 16776960,
+            fields: [
+                { name: '👤 Nama', value: nama, inline: true },
+                { name: '🎮 Discord', value: `@${discord}`, inline: true },
+                { name: '📦 File', value: file, inline: false },
+                { name: '💵 Harga', value: harga, inline: true },
+                { name: '⏰ Waktu', value: new Date().toLocaleString('id-ID'), inline: false },
+                { name: '📝 Info', value: info || 'Tidak ada', inline: false }
+            ],
+            footer: { text: 'OTC MOD HUB - CHECK MEMBER LIST' }
+        };
+
+        const response = await fetch(DISCORD_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: [embed] })
+        });
+
+        if (response.ok) {
+            alert('✅ Pesanan terkirim! Membuka Discord server...');
+            closeBuyModal();
+            window.open(DISCORD_SERVER, '_blank');
+        }
+    } catch (e) {
+        alert('❌ Error: ' + e.message);
+    }
+}
 
     // Fungsi untuk convert Google Drive link ke format download
     function convertDriveLink(url) {
