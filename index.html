@@ -56,7 +56,7 @@
             if (match) fileId = match[1];
         }
         // Return format download jika file ID ditemukan
-        return fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : url;
+        return fileId ? `https://drive.google.com/uc?id=${fileId}&export=download` : url;
     }
 
     async function loadMods() {
@@ -101,7 +101,7 @@
                         <span class="platform">${plat}</span>
                         <h3 style="margin:10px 0 5px; font-size:18px;">${nama}</h3>
                         <p style="font-size:13px; color:#aaa; margin-bottom:15px; height:40px; overflow:hidden;">${desc}</p>
-                        <a href="${link}" class="btn-dl" target="_blank">UNDUUH</a>
+                        <a href="${link}" class="btn-dl" target="_blank">DOWNLOAD</a>
                     </div>
                 </div>`;
             });
