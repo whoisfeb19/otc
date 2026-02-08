@@ -360,6 +360,14 @@ if (prev.includes('youtube.com') || prev.includes('youtu.be')) {
                     </div>
                 </div>`;
             });
+            // --- PERBAIKAN 1: Masukkan pemicu render TikTok di sini ---
+            setTimeout(() => {
+                if (window.tiktok && window.tiktok.embed) {
+                    window.tiktok.embed.render();
+                }
+            }, 500);
+            // -------------------------------------------------------
+
             if(grid.innerHTML === "") grid.innerHTML = "Database kosong.";
         } catch(e) {
             grid.innerHTML = "Gagal memuat data. Pastikan link Google Sheets sudah di-'Publish to the web'.";
