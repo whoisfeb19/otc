@@ -295,18 +295,42 @@
                 link = convertDriveLink(link);
 
                 let media = '';
-                // PERBAIKAN: Logika penentuan Video ID dan format link Embed
-                if (prev.includes('youtube.com') || prev.includes('youtu.be')) {
-                    let videoId = "";
-                    if (prev.includes('v=')) {
-                        videoId = prev.split('v=')[1].split('&')[0];
-                    } else {
-                        videoId = prev.split('/').pop().split('?')[0];
-                    }
-                    media = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
-                } else {
-                    media = `<img src="${prev}" onerror="this.src='https://placehold.co'">`;
-                }
+
+if (prev.includes('youtube.com') || prev.includes('youtu.be')) {
+    // LOGIKA YOUTUBE
+    let videoId = "";
+    if (prev.includes('v=')) {
+        videoId = prev.split('v=')[1].split('&')[0];
+    } else {
+        videoId = prev.split('/').pop().split('?')[0];
+    }
+    media = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+
+} else if (prev.includes('tiktok.com')) {
+    // LOGIKA TIKTOK
+    // Mengambil Video ID dari URL TikTok
+    let videoId = prev.split('/video/')[1]?.split('?')[0];
+    
+    media = `
+        <blockquote class="tiktok-embed" cite="${prev}" data-video-id="${videoId}" style="width:100%; height:auto;">
+            <section>
+                <a target="_blank" href="${prev}">Memuat video TikTok...</a>
+            </section>
+        </blockquote>`;
+    
+    // Penting: Panggil script embed TikTok agar muncul
+    if (!document.getElementById('tiktok-script')) {
+        let script = document.createElement('script');
+        script.id = 'tiktok-script';
+        script.src = "https://www.tiktok.com";
+        document.body.appendChild(script);
+    }
+
+} else {
+    // LOGIKA GAMBAR (DEFAULT)
+    media = `<img src="${prev}" onerror="this.src='https://placehold.co'">`;
+}
+
 
                 // Buat price tag
                 const priceClass = price === 'Free' ? 'price-free' : '';
