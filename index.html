@@ -101,15 +101,13 @@
     // Link CSV Anda sudah benar, pastikan Spreadsheet-nya masih di-publish ke Web
     const csvURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQDRJ17ZZZahiwECXbmCf5xG6VgsbUZrIoI7gsRuFijxwe_d0iaytC3dT57O9qkR3lLP7xgmJfMA8S9/pub?gid=0&single=true&output=csv';
 
-    // GANTI DENGAN DATA ANDA
-    const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
-    const DISCORD_SERVER = 'https://discord.gg/QFutgE9DnU'; // Ini publik, tidak apa-apa
+    // Data publik yang aman di browser
+    const DISCORD_SERVER = 'https://discord.gg/QFutgE9DnU'; 
     const DISCORD_CLIENT_ID = '1401008497793040394';
     const DISCORD_REDIRECT_URI = 'https://otc-official.netlify.app';
-    const GUILD_ID = process.env.GUILD_ID;
-    const BOT_TOKEN = process.env.BOT_TOKEN;
 
-    
+    // Variabel rahasia yang menggunakan process.env dihapus dari sini!
+
     let currentUser = null;
 
     // Check if user sudah login (dari localStorage)
@@ -132,38 +130,18 @@
         }
     }
 
+    // FUNGSI INI SEKARANG MEMANGGIL NETLIFY FUNCTION BARU
     async function exchangeCodeForToken(code) {
         try {
-            const response = await fetch('https://discord.com/api/oauth2/token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    client_id: DISCORD_CLIENT_ID,
-                    client_secret: '2Y09IiL57dvUZj-72Dx9umPu-yDWGY76',
-                    code: code,
-                    grant_type: 'authorization_code',
-                    redirect_uri: DISCORD_REDIRECT_URI,
-                    scope: 'identify'
-                })
-            });
+            // Panggil endpoint server yang aman untuk menukar kode dengan data user
+            const response = await fetch(`/.netlify/functions/handle-auth?code=${code}`);
 
             if (!response.ok) {
-                console.error('Token response error:', await response.text());
-                return;
+                console.error('Auth function error:', await response.text());
+                throw new Error('Gagal mengautentikasi dengan Discord.');
             }
 
-            const data = await response.json();
-            
-            const userResponse = await fetch('https://discord.com/api/users/@me', {
-                headers: { 'Authorization': `Bearer ${data.access_token}` }
-            });
-
-            if (!userResponse.ok) {
-                console.error('User fetch error:', await userResponse.text());
-                return;
-            }
-
-            const userData = await userResponse.json();
+            const userData = await response.json();
             
             // Simpan user data ke localStorage
             currentUser = { id: userData.id, username: userData.username, avatar: userData.avatar };
@@ -182,6 +160,7 @@
             }
         } catch (e) {
             console.error('OAuth error:', e);
+            alert(e.message);
         }
     }
 
@@ -211,6 +190,7 @@
     
     function proceedToDiscordLogin() {
         closeLoginModal();
+        // Memastikan scope guilds.join diminta saat login
         window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${DISCORD_REDIRECT_URI}&response_type=code&scope=identify%20guilds.join`;
     }
 
@@ -218,6 +198,7 @@
         document.getElementById('buyModal').classList.remove('active');
     }
 
+    // FUNGSI INI HARUS DIUBAH AGAR MEMANGGIL FUNGSI SERVER LAIN UNTUK MENGIRIM WEBHOOK
     async function sendToDiscord() {
     const nama = document.getElementById('buyNama').value.trim();
     const file = document.getElementById('buyFile').value;
@@ -228,28 +209,25 @@
         alert('Isi Nama Lengkap!');
         return;
     }
+    
+    if (!currentUser || !currentUser.id) {
+        alert('Data user tidak valid, coba login ulang.');
+        return;
+    }
 
     try {
-        const embed = {
-            title: '💰 PURCHASE VERIFIED',
-            description: `User baru ingin membeli: **${file}**`,
-            color: 2969626,
-            fields: [
-                { name: '👤 Nama', value: nama, inline: true },
-                { name: '🎮 Discord', value: `<@${currentUser.id}>`, inline: true },
-                { name: '📦 File', value: file, inline: false },
-                { name: '💵 Harga', value: harga, inline: true },
-                { name: '⏰ Waktu', value: new Date().toLocaleString('id-ID'), inline: false },
-                { name: '✅ Status', value: '**VERIFIED & JOINED**', inline: false },
-                { name: '📝 Info', value: info || 'Tidak ada', inline: false }
-            ],
-            footer: { text: 'OTC MOD HUB - USER SUDAH DI-SERVER' }
-        };
-
-        const response = await fetch(DISCORD_WEBHOOK, {
+        // Panggil endpoint server yang aman untuk mengirim webhook (Anda perlu membuat fungsi ini)
+        const response = await fetch('/.netlify/functions/send-webhook', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ embeds: [embed] })
+            body: JSON.stringify({
+                userId: currentUser.id,
+                username: currentUser.username,
+                namaLengkap: nama,
+                file: file,
+                harga: harga,
+                info: info
+            })
         });
 
         if (response.ok) {
@@ -348,5 +326,6 @@
     loadMods();
     initAuth(); // Initialize authentication - harus di akhir setelah semua function terdefinisi
 </script>
+
 </body>
 </html>
