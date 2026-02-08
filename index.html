@@ -139,6 +139,15 @@
             localStorage.setItem('otc_user', JSON.stringify(currentUser));
             updateLoginUI();
             window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Jika ada pending buy, buka modal otomatis
+            const pendingBuy = localStorage.getItem('otc_pending_buy');
+            if (pendingBuy) {
+                const { namaFile, harga } = JSON.parse(pendingBuy);
+                localStorage.removeItem('otc_pending_buy');
+                // Tunggu sebentar agar currentUser siap
+                setTimeout(() => openBuyModal(namaFile, harga), 100);
+            }
         } catch (e) {
             console.error('OAuth error:', e);
         }
@@ -150,6 +159,8 @@
 
     function openBuyModal(namaFile, harga) {
         if (!currentUser) {
+            // Simpan intent user sebelum redirect ke OAuth
+            localStorage.setItem('otc_pending_buy', JSON.stringify({ namaFile, harga }));
             // Auto-redirect ke Discord OAuth jika belum login
             window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${DISCORD_REDIRECT_URI}&response_type=code&scope=identify%20guilds.join`;
             return;
