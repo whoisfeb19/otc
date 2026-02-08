@@ -122,8 +122,10 @@
             });
 
             if (response.ok) {
-                alert('✅ Pesanan terkirim! Silahkan tunggu konfirmasi di Discord.\n\nBergabung ke server: ' + DISCORD_SERVER);
+                alert('✅ Pesanan terkirim! Membuka Discord server...');
                 closeBuyModal();
+                // Redirect ke Discord server
+                window.open(DISCORD_SERVER, '_blank');
             } else {
                 alert('❌ Gagal mengirim pesanan. Coba lagi!');
             }
