@@ -55,27 +55,8 @@
             const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
             if (match) fileId = match[1];
         }
-        // Return object dengan info download
-        return fileId ? {fileId: fileId, isDrive: true} : {url: url, isDrive: false};
-    }
-
-    // Fungsi untuk download file dari Google Drive
-    async function downloadDriveFile(fileId, fileName) {
-        try {
-            const url = `https://drive.google.com/uc?id=${fileId}&export=download`;
-            const response = await fetch(url);
-            const blob = await response.blob();
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = fileName || 'file';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
-        } catch(e) {
-            alert('Download gagal. File mungkin besar atau akses terbatas.');
-            console.error(e);
-        }
+        // Return format download langsung jika file ID ditemukan
+        return fileId ? `https://drive.google.com/uc?id=${fileId}&export=download` : url;
     }
 
     async function loadMods() {
@@ -96,7 +77,7 @@
                 const plat = col[2].replace(/"/g, "").trim();
                 const prev = col[3].replace(/"/g, "").trim();
                 let link = col[4].replace(/"/g, "").trim();
-                let linkInfo = convertDriveLink(link);
+                link = convertDriveLink(link);
 
                 let media = '';
                 // PERBAIKAN: Logika penentuan Video ID dan format link Embed
@@ -113,10 +94,6 @@
                 }
 
                 // Menggunakan backtick ( ` ) untuk membungkus HTML
-                const downloadBtn = linkInfo.isDrive 
-                    ? `<a href="#" onclick="downloadDriveFile('${linkInfo.fileId}', '${nama}'); return false;" class="btn-dl">DOWNLOAD</a>`
-                    : `<a href="${linkInfo.url}" class="btn-dl" target="_blank">UNDUh</a>`;
-                
                 grid.innerHTML += `
                 <div class="card">
                     <div class="preview">${media}</div>
@@ -124,7 +101,7 @@
                         <span class="platform">${plat}</span>
                         <h3 style="margin:10px 0 5px; font-size:18px;">${nama}</h3>
                         <p style="font-size:13px; color:#aaa; margin-bottom:15px; height:40px; overflow:hidden;">${desc}</p>
-                        ${downloadBtn}
+                        <a href="${link}" class="btn-dl" target="_blank">DOWNLOAD</a>
                     </div>
                 </div>`;
             });
