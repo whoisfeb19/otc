@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #0b0e14; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(0, 210, 255, 0.3); width: 100%; max-width: 400px; }
+    input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #161b22; color: #fff; box-sizing: border-box; }
+    button { width: 100%; padding: 15px; background: #00d2ff; border: none; color: #000; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+    button:hover { background: #0099ff; transform: scale(1.02); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 style="text-align:center; color:#00d2ff">UPLOAD CENTER</h2>
+    <input type="text" id="nama" placeholder="Nama Mod">
+    <textarea id="desc" placeholder="Deskripsi"></textarea>
+    <select id="platform">
+      <option value="PC">🖥️ PC</option>
+      <option value="Android">📱 Android</option>
+      <option value="PC & Android">🧱 PC & Android</option>
+    </select>
+    <input type="text" id="preview" placeholder="Link YouTube / Gambar">
+    <input type="text" id="price" placeholder="Price (Free / 50k / Rp 50.000)">
+    <input type="file" id="file">
+    <button onclick="proses()">PUBLISH SEKARANG</button>
+    <p id="status" style="text-align:center; color:#00ffcc"></p>
+  </div>
+  <script>
+    function proses() {
+      const f = document.getElementById('file').files[0];
+      if(!f) return alert("Pilih file!");
+      const r = new FileReader();
+      r.onload = function(e) {
+        const obj = {
+          namaMod: document.getElementById('nama').value,
+          deskripsi: document.getElementById('desc').value || "-",
+          platform: document.getElementById('platform').value,
+          linkPreview: document.getElementById('preview').value,
+          price: document.getElementById('price').value || "Free",
+          fileMod: { contents: Array.from(new Uint8Array(e.target.result)), name: f.name, mimeType: f.type }
+        };
+        document.getElementById('status').innerText = "Sedang Upload...";
+        google.script.run.withSuccessHandler(msg => {
+          document.getElementById('status').innerText = msg;
+          document.querySelectorAll('input, textarea').forEach(el => el.value = "");
+        }).uploadFile(obj);
+      };
+      r.readAsArrayBuffer(f);
+    }
+  </script>
+</body>
+</html>
