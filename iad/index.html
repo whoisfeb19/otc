@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Laporan Internal Affairs</title>
+    <style>
+        :root { --discord-blue: #5865f2; --bg-dark: #313338; --input-bg: #1e1f22; }
+        body { font-family: sans-serif; background: #2b2d31; color: white; display: flex; justify-content: center; padding: 20px; }
+        .container { background: var(--bg-dark); padding: 30px; border-radius: 8px; width: 100%; max-width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .hidden { display: none; }
+        h2 { text-align: center; color: #fff; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; font-weight: bold; text-transform: uppercase; color: #b5bac1; margin-bottom: 8px; }
+        input, select, textarea { width: 100%; padding: 10px; background: var(--input-bg); border: none; border-radius: 4px; color: white; font-size: 15px; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-discord { background: var(--discord-blue); color: white; }
+        .btn-submit { background: #248046; color: white; margin-top: 10px; }
+        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: #dbdee1; }
+        input[type="checkbox"] { width: auto; margin-top: 3px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Internal Affairs Division</h2>
+
+    <!-- Langkah 1 & 2: Login Discord -->
+    <div id="login-section">
+        <p style="text-align:center; color:#b5bac1; margin-bottom:20px;">Silahkan login untuk membuat laporan resmi.</p>
+        <!-- GANTI LINK DI BAWAH DENGAN URL OAUTH2 KAMU -->
+        <a href="https://discord.com" class="btn btn-discord" style="text-decoration:none; display:block; text-align:center;">
+            Login dengan Discord
+        </a>
+    </div>
+
+    <!-- Langkah 3, 4, 5: Form Laporan -->
+    <div id="form-section" class="hidden">
+        <form id="reportForm">
+            <div class="form-group">
+                <label>Username Discord (Otomatis)</label>
+                <input type="text" id="discord_user" readonly style="background:#2b2d31; color:#8e9297;">
+            </div>
+
+            <div class="form-group">
+                <label>User Control Panel (UCP)</label>
+                <input type="text" id="ucp" required placeholder="Masukkan nama UCP">
+            </div>
+
+            <div class="form-group">
+                <label>Nama Pelapor</label>
+                <input type="text" id="nama_pelapor" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nama Terlapor (Petugas)</label>
+                <input type="text" id="nama_terlapor" required>
+            </div>
+
+            <div class="form-group">
+                <label>Dugaan Pelanggaran</label>
+                <select id="pasal" required>
+                    <option value="">-- Pilih Pasal Pelanggaran --</option>
+                    <option value="Pasal 1 - Penyalahgunaan Wewenang">Pasal 1 - Penyalahgunaan Wewenang</option>
+                    <option value="Pasal 2 - Korupsi/Suap">Pasal 2 - Korupsi/Suap</option>
+                    <option value="Pasal 3 - Tindakan Tidak Profesional">Pasal 3 - Tindakan Tidak Profesional</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Kronologi Kejadian</label>
+                <textarea id="kronologi" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Link Bukti (Foto/Video)</label>
+                <input type="url" id="bukti" required placeholder="https://imgur.com...">
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="confirm" required>
+                <label for="confirm" style="text-transform:none;">Laporan ini bersifat resmi dan akan dipantau oleh Internal Affairs Division. Saya bersedia bertanggung jawab atas kebenaran laporan ini.</label>
+            </div>
+
+            <button type="submit" class="btn btn-submit">KIRIM LAPORAN</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 1. Ambil Token dari URL setelah login
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const accessToken = fragment.get('access_token');
+
+    if (accessToken) {
+        // Sembunyikan tombol login, tampilkan form
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('form-section').classList.remove('hidden');
+
+        // 2. Ambil data user dari API Discord
+        fetch('https://discord.com', {
+            headers: { authorization: `Bearer ${accessToken}` }
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('discord_user').value = `${data.username}#${data.discriminator || '0'}`;
+        });
+    }
+
+    // 3. Kirim ke Webhook Discord
+    document.getElementById('reportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const webhookURL = "MASUKKAN_URL_WEBHOOK_DISCORD_KAMU_DISINI";
+
+        const data = {
+            embeds: [{
+                title: "🚨 LAPORAN INTERNAL AFFAIRS BARU",
+                color: 15548997, // Warna Merah
+                fields: [
+                    { name: "Pelapor (Discord)", value: document.getElementById('discord_user').value, inline: true },
+                    { name: "UCP", value: document.getElementById('ucp').value, inline: true },
+                    { name: "Nama Pelapor (IC)", value: document.getElementById('nama_pelapor').value, inline: true },
+                    { name: "Nama Terlapor", value: document.getElementById('nama_terlapor').value, inline: true },
+                    { name: "Pasal", value: document.getElementById('pasal').value },
+                    { name: "Kronologi", value: document.getElementById('kronologi').value },
+                    { name: "Bukti", value: document.getElementById('bukti').value }
+                ],
+                timestamp: new Date()
+            }]
+        };
+
+        fetch(webhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => {
+            alert("Laporan berhasil dikirim!");
+            window.location.hash = ""; // Bersihkan token
+            location.reload();
+        });
+    });
+</script>
+
+</body>
+</html>
