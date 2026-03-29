@@ -14,7 +14,7 @@
 
     <!-- 1. HALAMAN LOGIN -->
     <div id="login-page" class="max-w-md w-full bg-slate-800 p-8 rounded-xl shadow-2xl border-t-4 border-blue-600 text-center">
-        <img src="https://upload.wikimedia.org" alt="Logo" class="w-20 mx-auto mb-4">
+        <img src="https://www.freeiconspng.com" alt="Logo" class="w-20 mx-auto mb-4">
         <h1 class="text-2xl font-bold mb-2">INTERNAL AFFAIRS</h1>
         <p class="text-slate-400 mb-8 text-sm text-balance">Gunakan akun Discord Anda untuk mengakses portal pengaduan resmi anggota kepolisian.</p>
         
@@ -91,44 +91,51 @@
     // --- 1. KONFIGURASI ---
     const CLIENT_ID = "1383312431253815378";
     const WEBHOOK_URL = "https://discord.com/api/webhooks/1461782776968908887/vHaIRDh8JLSiJyeDseSgUH2Bk_EfOBWj25YmMEmadzFLaWmhgpRxZVfH1sD6d3IP0Zzc";
+    // Menggunakan location.href tanpa query string untuk redirect
     const REDIRECT_URI = window.location.origin + window.location.pathname;
 
     // --- 2. LOGIKA LOGIN ---
     function handleLogin() {
-        // PERBAIKAN: Ditambahkan /api/oauth2/authorize?client_id=
+        // PERBAIKAN: Format URL OAuth2 yang benar
         const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
         window.location.href = authUrl;
     }
 
-    // --- 3. CEK LOGIN ---
+    // --- 3. CEK LOGIN (Cek apakah ada parameter 'code' di URL) ---
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
     if (code) {
+        // Jika ada code, sembunyikan login dan tampilkan form
         document.getElementById('login-page').classList.add('hidden');
         document.getElementById('form-page').classList.remove('hidden');
-        document.getElementById('display-username').value = "Verified via Discord";
+        document.getElementById('display-username').value = "TERVERIFIKASI DISCORD";
     }
 
-    // --- 4. KIRIM FORM ---
+    // --- 4. KIRIM FORM KE WEBHOOK ---
     document.getElementById('reportForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnSubmit');
-        btn.innerText = "Mengirim...";
+        
+        // Proteksi double click
+        btn.innerText = "SEDANG MENGIRIM...";
         btn.disabled = true;
 
         const payload = {
+            username: "SISTEM IAD",
+            avatar_url: "https://www.freeiconspng.com",
             embeds: [{
-                title: "🚨 LAPORAN MASUK: INTERNAL AFFAIRS",
-                color: 15158332,
+                title: "🚨 LAPORAN PELANGGARAN BARU",
+                color: 15158332, // Warna Merah
                 fields: [
-                    { name: "UCP", value: document.getElementById('ucp').value, inline: true },
-                    { name: "Pelapor", value: document.getElementById('nama-pelapor').value, inline: true },
-                    { name: "Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
-                    { name: "Pasal", value: document.getElementById('pasal').value },
-                    { name: "Kronologi", value: document.getElementById('kronologi').value },
-                    { name: "Bukti", value: document.getElementById('bukti').value }
+                    { name: "👤 User Control Panel (UCP)", value: `\`${document.getElementById('ucp').value}\``, inline: true },
+                    { name: "📝 Nama Pelapor (IC)", value: document.getElementById('nama-pelapor').value, inline: true },
+                    { name: "👮 Nama Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
+                    { name: "⚖️ Dugaan Pasal", value: document.getElementById('pasal').value },
+                    { name: "📖 Kronologi Kejadian", value: document.getElementById('kronologi').value },
+                    { name: "🔗 Bukti Pendukung", value: document.getElementById('bukti').value }
                 ],
+                footer: { text: "Internal Affairs Division - Portal Pengaduan" },
                 timestamp: new Date()
             }]
         };
@@ -139,14 +146,18 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
+
             if(res.ok) {
-                alert("Berhasil dikirim!");
+                alert("Laporan Anda berhasil dikirim ke tim IAD.");
+                // Bersihkan URL dari parameter 'code' dan kembali ke halaman utama
                 window.location.href = REDIRECT_URI;
+            } else {
+                throw new Error("Gagal mengirim");
             }
         } catch (err) {
-            alert("Gagal kirim!");
+            alert("Terjadi kesalahan saat mengirim laporan. Pastikan koneksi stabil.");
             btn.disabled = false;
-            btn.innerText = "KIRIM LAPORAN";
+            btn.innerText = "KIRIM LAPORAN KE IAD";
         }
     });
     </script>
