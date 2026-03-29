@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAD - Internal Affairs Division</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none; }
+        body { background-color: #0f172a; color: #e2e8f0; font-family: sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- 1. HALAMAN LOGIN -->
+    <div id="login-page" class="max-w-md w-full bg-slate-800 p-8 rounded-xl shadow-2xl border-t-4 border-blue-600 text-center">
+        <img src="https://upload.wikimedia.org" alt="Logo" class="w-20 mx-auto mb-4">
+        <h1 class="text-2xl font-bold mb-2">INTERNAL AFFAIRS DIVISION</h1>
+        <p class="text-slate-400 mb-8 text-sm text-balance">Gunakan akun Discord Anda untuk mengakses portal pengaduan resmi anggota kepolisian.</p>
+        
+        <button onclick="handleLogin()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-3">
+            <img src="https://cdn-icons-png.flaticon.com" class="w-5 h-5 invert">
+            MASUK DENGAN DISCORD
+        </button>
+    </div>
+
+    <!-- 2. HALAMAN FORM (Disembunyikan saat awal) -->
+    <div id="form-page" class="hidden max-w-2xl w-full bg-slate-800 rounded-xl shadow-2xl border border-slate-700 overflow-hidden">
+        <div class="bg-blue-700 p-4 font-bold text-center text-white tracking-widest text-sm uppercase">
+            Formulir Pengaduan Pelanggaran Anggota
+        </div>
+        
+        <form id="reportForm" class="p-6 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <label class="block text-slate-500 mb-1">Username Discord</label>
+                    <input type="text" id="display-username" disabled class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-blue-400 font-mono cursor-not-allowed">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">User Control Panel (UCP)</label>
+                    <input type="text" id="ucp" required placeholder="Nama Akun UCP" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <label class="block text-slate-400 mb-1">Nama Pelapor (IC)</label>
+                    <input type="text" id="nama-pelapor" required placeholder="Nama Karakter Anda" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Nama Terlapor (Polisi)</label>
+                    <input type="text" id="nama-terlapor" required placeholder="Nama/Pangkat Oknum" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+            </div>
+
+            <div class="text-sm">
+                <label class="block text-slate-400 mb-1">Dugaan Pasal Pelanggaran</label>
+                <select id="pasal" required class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="" disabled selected>-- Pilih Pelanggaran --</option>
+                    <option value="Penyalahgunaan Senjata">Penyalahgunaan Senjata</option>
+                    <option value="Korupsi & Suap">Korupsi & Suap</option>
+                    <option value="Brutalitas / Kekerasan Berlebih">Brutalitas / Kekerasan Berlebih</option>
+                    <option value="Pelanggaran Kode Etik">Pelanggaran Kode Etik</option>
+                </select>
+            </div>
+
+            <div class="text-sm">
+                <label class="block text-slate-400 mb-1">Kronologi Singkat</label>
+                <textarea id="kronologi" rows="3" required placeholder="Jelaskan kejadian secara rinci..." class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+            </div>
+
+            <div class="text-sm">
+                <label class="block text-slate-400 mb-1">Bukti Link (Imgur/YouTube)</label>
+                <input type="url" id="bukti" required placeholder="https://..." class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div class="flex items-start gap-2 bg-slate-900/50 p-3 rounded border border-slate-700">
+                <input type="checkbox" id="confirm" required class="mt-1">
+                <label for="confirm" class="text-[10px] text-slate-400 uppercase leading-relaxed font-semibold">
+                    Laporan ini resmi. Pihak IAD berhak memproses dan menuntut pembuktian lebih lanjut.
+                </label>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded font-bold transition">
+                KIRIM LAPORAN KE IAD
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // --- KONFIGURASI ---
+        const WEBHOOK_URL = "URL_WEBHOOK_DISCORD_ANDA";
+        const CLIENT_ID = "CLIENT_ID_DISCORD_ANDA";
+        const REDIRECT_URI = window.location.href.split('?')[0]; // Otomatis ambil URL sekarang
+
+        // Cek apakah ada 'code' dari Discord di URL (Setelah login)
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+
+        if (code) {
+            // Simulasi pengambilan data user (Di dunia nyata ini diproses di server backend)
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('form-page').classList.remove('hidden');
+            document.getElementById('display-username').value = "DiscordUser#0000"; // Contoh
+        }
+
+        function handleLogin() {
+            // Redirect ke login Discord
+            const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
+            window.location.href = authUrl;
+        }
+
+        // Handle Pengiriman Form
+        document.getElementById('reportForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.innerText = "Mengirim...";
+            btn.disabled = true;
+
+            const payload = {
+                embeds: [{
+                    title: "🚨 LAPORAN MASUK: INTERNAL AFFAIRS",
+                    color: 15158332,
+                    fields: [
+                        { name: "Pelapor (UCP)", value: document.getElementById('ucp').value, inline: true },
+                        { name: "Nama IC", value: document.getElementById('nama-pelapor').value, inline: true },
+                        { name: "Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
+                        { name: "Pelanggaran", value: document.getElementById('pasal').value },
+                        { name: "Kronologi", value: document.getElementById('kronologi').value },
+                        { name: "Bukti", value: document.getElementById('bukti').value }
+                    ],
+                    timestamp: new Date()
+                }]
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert("Laporan Terkirim! Terima kasih.");
+                    window.location.href = REDIRECT_URI;
+                }
+            } catch (err) {
+                alert("Gagal mengirim laporan.");
+                btn.disabled = false;
+                btn.innerText = "KIRIM LAPORAN KE IAD";
+            }
+        });
+    </script>
+</body>
+</html>
