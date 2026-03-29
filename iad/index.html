@@ -144,17 +144,18 @@
 
 <script>
 // --- KONFIGURASI ---
-const clientId = '1383312431253815378'; 
+const clientId = '1470706338924331060'; // ID kamu
 const redirectUri = window.location.origin + window.location.pathname;
-const webhookURL = "MASUKKAN_URL_WEBHOOK_DISCORD_DI_SINI"; // ISI WEBHOOK KAMU
+const webhookURL = "MASUKKAN_URL_WEBHOOK_DISCORD_DI_SINI"; 
 
 // --- LOGIKA LOGIN ---
 document.getElementById('loginBtn').onclick = function(){
-  const url = `https://discord.com{clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
+  const url = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
   window.location.href = url;
 }
 
 window.onload = async function(){
+  // Tangkap token dari URL
   if (window.location.hash && window.location.hash.includes('access_token')){
     const params = new URLSearchParams(window.location.hash.substring(1));
     const token = params.get('access_token');
@@ -167,48 +168,48 @@ window.onload = async function(){
   const token = localStorage.getItem('discord_token');
   if(token){
     try {
-        const r = await fetch('https://discord.com', {
+        const r = await fetch('https://discord.com/api/users/@me', {
             headers: { Authorization: 'Bearer ' + token }
         });
         
         if(r.ok){
             const user = await r.json();
+            // User berhasil login, tampilkan form & isi username otomatis
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('formSection').classList.remove('hidden');
-            document.getElementById('discord_user').value = `${user.username}#${user.discriminator || '0000'}`;
+            document.getElementById('discord_user').value = `${user.username} (ID: ${user.id})`;
         } else {
             localStorage.removeItem('discord_token');
         }
     } catch(e) {
-        console.error("Auth Error", e);
+        console.error("Gagal ambil data Discord", e);
     }
   }
 }
 
-// --- KIRIM KE WEBHOOK ---
+// --- KIRIM DATA KE WEBHOOK ---
 document.getElementById('reportForm').onsubmit = async function(e){
     e.preventDefault();
-    const btn = document.getElementById('submitBtn');
+    const btn = e.target.querySelector('button');
     btn.disabled = true;
-    btn.innerText = "SEDANG MENGIRIM DOKUMEN...";
+    btn.innerText = "Mengirim...";
 
     const payload = {
-        username: "INTERNAL AFFAIRS DISPATCH",
+        username: "IA Division Logs",
         avatar_url: "https://i.imgur.com",
         embeds: [{
-            title: "⚖️ OFFICIAL MISCONDUCT REPORT",
-            description: "Sebuah laporan resmi telah diterima oleh sistem IAD.",
-            color: 15158332, 
+            title: "📩 LAPORAN BARU MASUK",
+            color: 15548997, // Warna Merah
             fields: [
-                { name: "🛡️ Pelapor (Discord)", value: `\`${document.getElementById('discord_user').value}\`` },
-                { name: "🆔 Account UCP", value: document.getElementById('ucp').value, inline: true },
-                { name: "👤 Nama IC Pelapor", value: document.getElementById('nama_pelapor').value, inline: true },
-                { name: "👮 Petugas Terlapor", value: document.getElementById('nama_terlapor').value },
-                { name: "📋 Klasifikasi", value: `**${document.getElementById('pasal').value}**` },
-                { name: "📜 Kronologi", value: document.getElementById('kronologi').value },
-                { name: "🎞️ Bukti Digital", value: `[Klik di sini untuk melihat bukti](${document.getElementById('bukti').value})` }
+                { name: "👤 Pengguna Discord", value: document.getElementById('discord_user').value },
+                { name: "🆔 UCP Account", value: document.getElementById('ucp').value, inline: true },
+                { name: "📝 Nama Pelapor (IC)", value: document.getElementById('nama_pelapor').value, inline: true },
+                { name: "👮 Nama Terlapor", value: document.getElementById('nama_terlapor').value },
+                { name: "⚖️ Jenis Pelanggaran", value: document.getElementById('pasal').value },
+                { name: "📖 Kronologi", value: document.getElementById('kronologi').value },
+                { name: "🔗 Link Bukti", value: document.getElementById('bukti').value }
             ],
-            footer: { text: "IAD-OPS Automated Records Manager" },
+            footer: { text: "Internal Affairs Division - Automated Report" },
             timestamp: new Date()
         }]
     };
@@ -219,12 +220,12 @@ document.getElementById('reportForm').onsubmit = async function(e){
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        alert("Pesan Terkirim: Laporan Anda telah diarsipkan ke dalam sistem IAD.");
+        alert("Laporan berhasil terkirim ke Internal Affairs!");
         location.reload();
     } catch(err) {
-        alert("Koneksi Gagal.");
+        alert("Gagal mengirim laporan. Cek koneksi atau Webhook URL.");
         btn.disabled = false;
-        btn.innerText = "KIRIM LAPORAN RESMI";
+        btn.innerText = "KIRIM LAPORAN SEKARANG";
     }
 }
 </script>
