@@ -92,85 +92,108 @@
     </div>
 
     <script>
-        // --- CONFIGURATION (GANTI DISINI) ---
-        const CLIENT_ID = '1383312431253815378'; // Ganti dengan Client ID dari Discord Developer Portal
-        const REDIRECT_URI = window.location.href.split('#')[0]; // URL file ini otomatis
-        const WEBHOOK_URL = 'https://discord.com'; // Ganti dengan Webhook Channel Anda
+    // --- CONFIGURATION ---
+    // Pastikan CLIENT_ID diapit tanda kutip
+    const CLIENT_ID = '1394857594132365482'; 
+    
+    // Gunakan URL statis atau dinamis yang bersih
+    const REDIRECT_URI = 'https://ottibonynyo-mods.netlify.app';
+    
+    // Ganti dengan URL Webhook Discord Anda
+    const WEBHOOK_URL = 'ISI_WEBHOOK_DISCORD_DISINI'; 
 
-        // 1. Alur Login Discord
-        function loginDiscord() {
-            const scope = 'identify';
-            const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${scope}`;
-            window.location.href = authUrl;
+    // 1. Alur Login Discord (Perbaikan Syntax)
+    function loginDiscord() {
+        const scope = 'identify';
+        // Menyusun URL dengan template literals yang lebih aman
+        const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${scope}`;
+        
+        window.location.href = authUrl;
+    }
+
+    // 2. Cek Token di URL setelah Login
+    window.onload = () => {
+        // Mengambil fragment (#) dari URL
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
+
+        if (accessToken) {
+            fetchDiscordUser(accessToken);
+            // Bersihkan hash di URL agar terlihat rapi
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
+    };
 
-        // 2. Cek Token di URL setelah Login
-        window.onload = () => {
-            const fragment = new URLSearchParams(window.location.hash.slice(1));
-            const accessToken = fragment.get('access_token');
-
-            if (accessToken) {
-                fetchDiscordUser(accessToken);
-            }
-        };
-
-        // 3. Ambil data User dari API Discord
-        async function fetchDiscordUser(token) {
-            try {
-                const response = await fetch('https://discord.com', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const user = await response.json();
-                
+    // 3. Ambil data User dari API Discord
+    async function fetchDiscordUser(token) {
+        try {
+            const response = await fetch('https://discord.com', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const user = await response.json();
+            
+            if (user.id) {
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('form-section').classList.remove('hidden');
                 
-                document.getElementById('discord_user').value = `${user.username}#${user.discriminator || '0'}`;
+                // Menampilkan Username dan Diskriminator (jika ada)
+                const disc = user.discriminator === "0" ? "" : `#${user.discriminator}`;
+                document.getElementById('discord_user').value = `${user.username}${disc}`;
                 document.getElementById('user-display').innerText = user.username;
-            } catch (err) {
-                alert('Gagal mengambil data Discord!');
             }
+        } catch (err) {
+            console.error(err);
+            alert('Gagal mengambil data Discord! Silakan coba login kembali.');
         }
+    }
 
-        // 4. Kirim Data ke Webhook Discord
-        document.getElementById('report-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            btn.innerText = "Mengirim...";
-            btn.disabled = true;
+    // 4. Kirim Data ke Webhook Discord
+    document.getElementById('report-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submit-btn');
+        const originalText = btn.innerText;
+        
+        btn.innerText = "⏳ Mengirim Laporan...";
+        btn.disabled = true;
 
-            const data = {
-                username: "Internal Affairs Logs",
-                embeds: [{
-                    title: "🚨 LAPORAN PELANGGARAN PETUGAS",
-                    color: 15158332, // Merah
-                    fields: [
-                        { name: "Pelapor (Discord)", value: document.getElementById('discord_user').value, inline: true },
-                        { name: "UCP", value: document.getElementById('ucp').value, inline: true },
-                        { name: "Nama Pelapor (IC)", value: document.getElementById('nama_pelapor').value, inline: true },
-                        { name: "Nama Terlapor", value: document.getElementById('nama_terlapor').value, inline: true },
-                        { name: "Dugaan Pelanggaran", value: document.getElementById('pasal').value },
-                        { name: "Kronologi", value: document.getElementById('kronologi').value },
-                        { name: "Bukti", value: document.getElementById('bukti').value },
-                    ],
-                    footer: { text: "Sistem Laporan IAD • " + new Date().toLocaleString() }
-                }]
-            };
-
-            try {
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                alert('Laporan berhasil terkirim ke Internal Affairs!');
-                location.reload();
-            } catch (err) {
-                alert('Gagal mengirim laporan!');
-                btn.disabled = false;
-                btn.innerText = "Kirim Laporan";
-            }
+        const payload = {
+            embeds: [{
+                title: "🚨 LAPORAN INTERNAL AFFAIRS DIVISION",
+                color: 15158332,
+                fields: [
+                    { name: "👤 Pelapor (Discord)", value: `**${document.getElementById('discord_user').value}**`, inline: true },
+                    { name: "🆔 UCP", value: document.getElementById('ucp').value, inline: true },
+                    { name: "📋 Nama Pelapor (IC)", value: document.getElementById('nama_pelapor').value, inline: true },
+                    { name: "🛡️ Nama Terlapor", value: document.getElementById('nama_terlapor').value, inline: true },
+                    { name: "⚖️ Dugaan Pelanggaran", value: `\`${document.getElementById('pasal').value}\`` },
+                    { name: "📝 Kronologi", value: document.getElementById('kronologi').value },
+                    { name: "🔗 Bukti", value: document.getElementById('bukti').value },
+                ],
+                footer: { text: "IAD Reporting System • " + new Date().toLocaleString() }
+            }]
         };
-    </script>
+
+        try {
+            const res = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                alert('✅ Laporan Anda telah berhasil terkirim dan akan segera diproses.');
+                location.reload();
+            } else {
+                throw new Error();
+            }
+        } catch (err) {
+            alert('❌ Gagal mengirim ke Discord. Pastikan Webhook URL sudah benar.');
+            btn.disabled = false;
+            btn.innerText = originalText;
+        }
+    };
+</script>
+
 </body>
 </html>
