@@ -20,11 +20,11 @@
         
         <button onclick="handleLogin()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-3">
             <img src="https://cdn-icons-png.flaticon.com" class="w-5 h-5 invert">
-            MASUK
+            MASUK DENGAN DISCORD
         </button>
     </div>
 
-    <!-- 2. HALAMAN FORM (Disembunyikan saat awal) -->
+    <!-- 2. HALAMAN FORM -->
     <div id="form-page" class="hidden max-w-2xl w-full bg-slate-800 rounded-xl shadow-2xl border border-slate-700 overflow-hidden">
         <div class="bg-blue-700 p-4 font-bold text-center text-white tracking-widest text-sm uppercase">
             Formulir Pengaduan Pelanggaran Anggota
@@ -37,24 +37,24 @@
                     <input type="text" id="display-username" disabled class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-blue-400 font-mono cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-400 mb-1">User Control Panel (UCP)</label>
+                    <label class="block text-slate-400 mb-1 font-semibold">User Control Panel (UCP)</label>
                     <input type="text" id="ucp" required placeholder="Nama Akun UCP" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                    <label class="block text-slate-400 mb-1">Nama Pelapor (IC)</label>
+                    <label class="block text-slate-400 mb-1 font-semibold">Nama Pelapor (IC)</label>
                     <input type="text" id="nama-pelapor" required placeholder="Nama Karakter Anda" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-slate-400 mb-1">Nama Terlapor (Polisi)</label>
+                    <label class="block text-slate-400 mb-1 font-semibold">Nama Terlapor (Polisi)</label>
                     <input type="text" id="nama-terlapor" required placeholder="Nama/Pangkat Oknum" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
 
             <div class="text-sm">
-                <label class="block text-slate-400 mb-1">Dugaan Pasal Pelanggaran</label>
+                <label class="block text-slate-400 mb-1 font-semibold">Dugaan Pasal Pelanggaran</label>
                 <select id="pasal" required class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
                     <option value="" disabled selected>-- Pilih Pelanggaran --</option>
                     <option value="Penyalahgunaan Senjata">Penyalahgunaan Senjata</option>
@@ -65,18 +65,18 @@
             </div>
 
             <div class="text-sm">
-                <label class="block text-slate-400 mb-1">Kronologi Singkat</label>
+                <label class="block text-slate-400 mb-1 font-semibold">Kronologi Singkat</label>
                 <textarea id="kronologi" rows="3" required placeholder="Jelaskan kejadian secara rinci..." class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
             </div>
 
             <div class="text-sm">
-                <label class="block text-slate-400 mb-1">Bukti Link (Imgur/YouTube)</label>
+                <label class="block text-slate-400 mb-1 font-semibold">Bukti Link (Imgur/YouTube)</label>
                 <input type="url" id="bukti" required placeholder="https://..." class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
 
             <div class="flex items-start gap-2 bg-slate-900/50 p-3 rounded border border-slate-700">
                 <input type="checkbox" id="confirm" required class="mt-1">
-                <label for="confirm" class="text-[10px] text-slate-400 uppercase leading-relaxed font-semibold">
+                <label for="confirm" class="text-[10px] text-slate-400 uppercase leading-relaxed font-bold">
                     Laporan ini resmi. Pihak IAD berhak memproses dan menuntut pembuktian lebih lanjut.
                 </label>
             </div>
@@ -90,77 +90,65 @@
     <script>
     // --- 1. KONFIGURASI ---
     const CLIENT_ID = "1383312431253815378";
-    const WEBHOOK_URL = "https://discord.com";
-    
-    // Mengambil URL asli tanpa parameter ?code= (Penting agar login tidak error)
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1461782776968908887/vHaIRDh8JLSiJyeDseSgUH2Bk_EfOBWj25YmMEmadzFLaWmhgpRxZVfH1sD6d3IP0Zzc";
     const REDIRECT_URI = window.location.origin + window.location.pathname;
 
     // --- 2. LOGIKA LOGIN ---
     function handleLogin() {
-        // Konstruksi URL OAuth2 Discord yang BENAR
+        // PERBAIKAN: Ditambahkan /api/oauth2/authorize?client_id=
         const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
-        
-        // Pindah ke halaman login Discord
         window.location.href = authUrl;
     }
 
-    // --- 3. CEK APAKAH SUDAH LOGIN ---
+    // --- 3. CEK LOGIN ---
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
     if (code) {
-        // Jika ada 'code' di URL, berarti user baru saja kembali dari login Discord
         document.getElementById('login-page').classList.add('hidden');
         document.getElementById('form-page').classList.remove('hidden');
-        
-        // Menampilkan teks "Verified" karena nama asli butuh backend
-        const userDisplay = document.getElementById('display-username');
-        if(userDisplay) userDisplay.value = "Verified via Discord";
+        document.getElementById('display-username').value = "Verified via Discord";
     }
 
-    // --- 4. LOGIKA KIRIM FORM ---
-    const reportForm = document.getElementById('reportForm');
-    if (reportForm) {
-        reportForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            btn.innerText = "Mengirim Laporan...";
-            btn.disabled = true;
+    // --- 4. KIRIM FORM ---
+    document.getElementById('reportForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmit');
+        btn.innerText = "Mengirim...";
+        btn.disabled = true;
 
-            const payload = {
-                embeds: [{
-                    title: "🚨 LAPORAN PELANGGARAN: INTERNAL AFFAIRS",
-                    color: 15158332,
-                    fields: [
-                        { name: "UCP Name", value: document.getElementById('ucp').value, inline: true },
-                        { name: "Nama Pelapor (IC)", value: document.getElementById('nama-pelapor').value, inline: true },
-                        { name: "Nama Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
-                        { name: "Dugaan Pelanggaran", value: document.getElementById('pasal').value },
-                        { name: "Kronologi Kejadian", value: document.getElementById('kronologi').value },
-                        { name: "Link Bukti", value: document.getElementById('bukti').value }
-                    ],
-                    footer: { text: "Sistem Pengaduan IAD" },
-                    timestamp: new Date()
-                }]
-            };
+        const payload = {
+            embeds: [{
+                title: "🚨 LAPORAN MASUK: INTERNAL AFFAIRS",
+                color: 15158332,
+                fields: [
+                    { name: "UCP", value: document.getElementById('ucp').value, inline: true },
+                    { name: "Pelapor", value: document.getElementById('nama-pelapor').value, inline: true },
+                    { name: "Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
+                    { name: "Pasal", value: document.getElementById('pasal').value },
+                    { name: "Kronologi", value: document.getElementById('kronologi').value },
+                    { name: "Bukti", value: document.getElementById('bukti').value }
+                ],
+                timestamp: new Date()
+            }]
+        };
 
-            try {
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                alert("Laporan Anda telah terkirim ke tim IAD!");
-                window.location.href = REDIRECT_URI; // Reset halaman
-            } catch (err) {
-                alert("Terjadi kesalahan saat mengirim. Cek koneksi Anda.");
-                btn.disabled = false;
-                btn.innerText = "KIRIM LAPORAN KE IAD";
+        try {
+            const res = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if(res.ok) {
+                alert("Berhasil dikirim!");
+                window.location.href = REDIRECT_URI;
             }
-        });
-    }
-</script>
-
-
+        } catch (err) {
+            alert("Gagal kirim!");
+            btn.disabled = false;
+            btn.innerText = "KIRIM LAPORAN";
+        }
+    });
+    </script>
 </body>
 </html>
