@@ -8,43 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com">
     <style>
         @import url('https://fonts.googleapis.com');
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #0a0f1d; 
-            color: #f1f5f9; 
-            overflow: hidden;
-        }
-
-        .glow-card {
-            background: rgba(17, 24, 39, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Spinner Animation */
-        .loader {
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid #6366f1;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0a0f1d; color: #f1f5f9; overflow: hidden; }
+        .glow-card { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .loader { border: 3px solid rgba(255, 255, 255, 0.1); border-top: 3px solid #6366f1; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .btn-discord {
-            background-color: #5865F2;
-            transition: all 0.3s ease;
-        }
-
-        .btn-discord:hover {
-            background-color: #4752c4;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(88, 101, 242, 0.4);
-        }
+        .btn-discord { background-color: #5865F2; transition: all 0.3s ease; }
+        .btn-discord:hover { background-color: #4752c4; transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(88, 101, 242, 0.4); }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -58,7 +27,7 @@
             <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-2">Internal System</h2>
             <h1 class="text-3xl font-extrabold mb-4">Mandalika Police</h1>
             <p class="text-slate-400 text-sm leading-relaxed">
-                Silakan masuk menggunakan akun Discord Anda untuk memverifikasi identitas di dashboard kepolisian.
+                Gunakan akun Discord Anda untuk memverifikasi identitas di dashboard internal kepolisian.
             </p>
         </div>
 
@@ -69,19 +38,19 @@
 
         <div class="space-y-4 border-t border-slate-800 pt-6">
             <p class="text-[11px] text-slate-500 uppercase font-semibold tracking-tighter">
-                Tidak punya akun? Hubungi Admin IAD untuk pendaftaran.
+                Hanya akun resmi yang dapat mengakses sistem ini.
             </p>
         </div>
     </div>
 
-    <!-- 2. OVERLAY PENCCOKAN (Hidden by default) -->
+    <!-- 2. OVERLAY MATCHING (Tanpa Progress Bar) -->
     <div id="matchOverlay" class="fixed inset-0 bg-slate-950/90 z-50 flex flex-col items-center justify-center text-center hidden">
         <div class="loader mb-6"></div>
         <h3 class="text-xl font-bold mb-2">Mencocokkan Akun</h3>
-        <p class="text-slate-400 text-sm">Sedang mengambil data Discord ID Anda...</p>
+        <p class="text-slate-400 text-sm">Menghubungkan Discord ID dengan sistem database...</p>
     </div>
 
-    <!-- BACKGROUND DECORATION -->
+    <!-- DEKORASI BACKGROUND -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-0 opacity-20 pointer-events-none">
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600 rounded-full blur-[120px]"></div>
         <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600 rounded-full blur-[120px]"></div>
@@ -92,33 +61,35 @@
     <script src="app.js"></script>
     
     <script>
-        // --- KONFIGURASI ---
+        // --- KONFIGURASI SESUAI LINK BERHASIL ANDA ---
         const CONFIG = {
-            clientId: '1383312431253815378', // Ganti jika ID Anda berbeda
-            redirectUri: window.location.origin + window.location.pathname,
+            clientId: '1470706338924331060', // ID dari link berhasil Anda
+            // Gunakan path lengkap authorize
+            authUrl: 'https://discord.com', 
+            // Redirect URI harus terdaftar di Discord Dev Portal
+            redirectUri: 'https://mandalika-police.netlify.app', 
             scopes: 'identify'
         };
 
-        // --- HANDLER KLIK LOGIN ---
+        // --- HANDLER TOMBOL LOGIN ---
         document.getElementById('loginBtn').onclick = function() {
-            const url = `https://discord.com` + 
-                        `?client_id=${CONFIG.clientId}` + 
-                        `&redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}` + 
-                        `&response_type=token` + 
-                        `&scope=${encodeURIComponent(CONFIG.scopes)}`;
-            window.location.href = url;
+            // Konstruksi URL yang persis sama dengan contoh BERHASIL Anda
+            const finalUrl = `${CONFIG.authUrl}?client_id=${CONFIG.clientId}&redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}&response_type=token&scope=${encodeURIComponent(CONFIG.scopes)}`;
+            
+            console.log("Redirecting to:", finalUrl);
+            window.location.href = finalUrl;
         };
 
-        // --- LOGIKA SAAT HALAMAN DIMUAT ---
+        // --- LOGIKA SETELAH LOGIN (WINDOW LOAD) ---
         window.onload = async function() {
-            // 1. Cek jika ada token di URL (setelah redirect dari Discord)
+            // Tangkap token dari Hash URL (#access_token=...)
             if (window.location.hash && window.location.hash.includes('access_token')) {
                 const params = new URLSearchParams(window.location.hash.substring(1));
                 const token = params.get('access_token');
                 
                 if (token) {
                     localStorage.setItem('discord_token', token);
-                    // Bersihkan URL dari hash token agar bersih
+                    // Bersihkan hash di bar alamat agar URL rapi kembali
                     history.replaceState(null, '', window.location.pathname);
                 }
             }
@@ -126,12 +97,12 @@
             const token = localStorage.getItem('discord_token');
             if (!token) return;
 
-            // 2. Tampilkan Overlay "Matching"
+            // Tampilkan Overlay Pencocokan
             const overlay = document.getElementById('matchOverlay');
             overlay.classList.remove('hidden');
 
             try {
-                // 3. Ambil Info dari Discord API
+                // Ambil data User dari Discord API
                 const res = await fetch('https://discord.com', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -143,30 +114,29 @@
                 }
 
                 const user = await res.json();
-                console.log("Discord User ID:", user.id);
+                console.log("Discord User ID terdeteksi:", user.id);
 
-                // 4. Proses Pencocokan Database (Memanggil fungsi dari app.js)
-                // Saya beri delay 1 detik saja agar user sempat melihat status "Matching"
-                await new Promise(r => setTimeout(r, 1000));
+                // PENCOCOKAN DATABASE (Memanggil fungsi dari app.js)
+                // Memberi sedikit jeda visual 1 detik
+                await new Promise(r => setTimeout(r, 1200));
 
                 if (typeof loginByDiscordId === 'function') {
-                    const dbResult = await loginByDiscordId(String(user.id));
+                    const result = await loginByDiscordId(String(user.id));
                     
-                    if (dbResult && dbResult.ok) {
+                    if (result && result.ok) {
                         window.location.href = 'dashboard.html';
                     } else {
-                        alert(`AKSES DITOLAK\nID Discord (${user.id}) tidak ditemukan dalam database Kepolisian Mandalika.`);
+                        alert(`DATA TIDAK DITEMUKAN\nID Discord (${user.id}) tidak terdaftar dalam database Kepolisian Mandalika.`);
                         localStorage.removeItem('discord_token');
                         overlay.classList.add('hidden');
                     }
                 } else {
-                    // Jika app.js belum siap, tampilkan pesan dev
-                    console.error("Fungsi loginByDiscordId belum ada di app.js");
+                    console.error("Fungsi loginByDiscordId tidak ditemukan di app.js");
                     overlay.classList.add('hidden');
                 }
 
             } catch (err) {
-                console.error("Auth Error:", err);
+                console.error("Proses Auth Gagal:", err);
                 overlay.classList.add('hidden');
             }
         };
