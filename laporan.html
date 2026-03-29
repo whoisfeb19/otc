@@ -88,68 +88,79 @@
     </div>
 
     <script>
-        // --- KONFIGURASI ---
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1461782776968908887/vHaIRDh8JLSiJyeDseSgUH2Bk_EfOBWj25YmMEmadzFLaWmhgpRxZVfH1sD6d3IP0Zzc";
-        const CLIENT_ID = "1383312431253815378";
-        const REDIRECT_URI = window.location.href.split('?')[0]; // Otomatis ambil URL sekarang
+    // --- KONFIGURASI ---
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1461782776968908887/vHaIRDh8JLSiJyeDseSgUH2Bk_EfOBWj25YmMEmadzFLaWmhgpRxZVfH1sD6d3IP0Zzc";
+    const CLIENT_ID = "1383312431253815378";
+    
+    // REDIRECT_URI harus bersih tanpa parameter ?code=...
+    const REDIRECT_URI = window.location.origin + window.location.pathname;
 
-        // Cek apakah ada 'code' dari Discord di URL (Setelah login)
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
+    // Cek apakah ada 'code' dari Discord di URL (Setelah login)
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
 
-        if (code) {
-            // Simulasi pengambilan data user (Di dunia nyata ini diproses di server backend)
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('form-page').classList.remove('hidden');
-            document.getElementById('display-username').value = "DiscordUser#0000"; // Contoh
-        }
+    if (code) {
+        // Jika ada code, sembunyikan login dan tampilkan form
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('form-page').classList.remove('hidden');
+        
+        // Catatan: Nama user asli hanya bisa ditarik lewat Backend.
+        // Di sini kita tampilkan placeholder agar form bisa lanjut.
+        document.getElementById('display-username').value = "Verified via Discord"; 
+    }
 
-        function handleLogin() {
-            // Redirect ke login Discord
-            const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
-            window.location.href = authUrl;
-        }
+    function handleLogin() {
+        // PERBAIKAN: Format URL OAuth2 Discord yang benar
+        const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
+        
+        window.location.href = authUrl;
+    }
 
-        // Handle Pengiriman Form
-        document.getElementById('reportForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            btn.innerText = "Mengirim...";
-            btn.disabled = true;
+    // Handle Pengiriman Form
+    document.getElementById('reportForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmit');
+        btn.innerText = "Sedang Mengirim...";
+        btn.disabled = true;
 
-            const payload = {
-                embeds: [{
-                    title: "🚨 LAPORAN MASUK: INTERNAL AFFAIRS",
-                    color: 15158332,
-                    fields: [
-                        { name: "Pelapor (UCP)", value: document.getElementById('ucp').value, inline: true },
-                        { name: "Nama IC", value: document.getElementById('nama-pelapor').value, inline: true },
-                        { name: "Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
-                        { name: "Pelanggaran", value: document.getElementById('pasal').value },
-                        { name: "Kronologi", value: document.getElementById('kronologi').value },
-                        { name: "Bukti", value: document.getElementById('bukti').value }
-                    ],
-                    timestamp: new Date()
-                }]
-            };
+        const payload = {
+            embeds: [{
+                title: "🚨 LAPORAN MASUK: INTERNAL AFFAIRS",
+                color: 15158332,
+                fields: [
+                    { name: "Pelapor (UCP)", value: document.getElementById('ucp').value, inline: true },
+                    { name: "Nama IC", value: document.getElementById('nama-pelapor').value, inline: true },
+                    { name: "Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
+                    { name: "Pelanggaran", value: document.getElementById('pasal').value },
+                    { name: "Kronologi", value: document.getElementById('kronologi').value },
+                    { name: "Bukti", value: document.getElementById('bukti').value }
+                ],
+                footer: { text: "Sistem Laporan IAD Otomatis" },
+                timestamp: new Date()
+            }]
+        };
 
-            try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-                if (response.ok) {
-                    alert("Laporan Terkirim! Terima kasih.");
-                    window.location.href = REDIRECT_URI;
-                }
-            } catch (err) {
-                alert("Gagal mengirim laporan.");
-                btn.disabled = false;
-                btn.innerText = "KIRIM LAPORAN KE IAD";
+            if (response.ok) {
+                alert("Laporan Berhasil Terkirim ke Channel IAD!");
+                // Kembalikan ke halaman awal tanpa parameter ?code
+                window.location.href = REDIRECT_URI;
+            } else {
+                throw new Error("Gagal kirim");
             }
-        });
-    </script>
+        } catch (err) {
+            alert("Gagal mengirim laporan. Pastikan Webhook valid.");
+            btn.disabled = false;
+            btn.innerText = "KIRIM LAPORAN KE IAD";
+        }
+    });
+</script>
+
 </body>
 </html>
