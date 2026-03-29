@@ -50,101 +50,117 @@
 </head>
 <body class="flex items-center justify-center p-4">
 
-    <div class="iad-card relative w-full max-w-2xl rounded-xl overflow-hidden p-8">
-        <div class="header-stripe"></div>
-        
-        <!-- Header Branding -->
-        <div class="text-center mb-8">
-            <div class="flex justify-center mb-4">
-                <!-- Logo Placeholder (Bisa diganti URL logo departemen kamu) -->
-                <div class="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
+   <div class="iad-card relative w-full max-w-2xl rounded-xl overflow-hidden p-8">
+    <div class="header-stripe"></div>
+    
+    <!-- Header Branding -->
+    <div class="text-center mb-8">
+        <div class="flex justify-center mb-4">
+            <div class="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-2xl font-bold text-white tracking-tight">INTERNAL AFFAIRS DIVISION</h1>
+        <p class="text-blue-400 text-xs font-semibold tracking-widest uppercase mt-1">Professional Standards Bureau</p>
+        <div class="h-px bg-slate-700 w-full mt-6"></div>
+    </div>
+
+    <!-- Section 1: Login -->
+    <div id="loginSection" class="text-center py-10">
+        <h2 class="text-slate-300 mb-6 font-medium">Autentikasi Diperlukan untuk Mengakses Formulir</h2>
+        <button id="loginBtn" class="btn-primary w-full max-w-xs py-3 px-6 rounded-lg text-white font-bold flex items-center justify-center gap-3 mx-auto">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.086 2.157 2.419c0 1.334-.966 2.419-2.156 2.419zm7.974 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.086 2.157 2.419c0 1.334-.946 2.419-2.157 2.419z""")/>></svg>
+            LOGIN WITH DISCORD
+        </button>
+    </div>
+
+    <!-- Section 2: Form Laporan -->
+    <div id="formSection" class="hidden">
+        <form id="reportForm" class="space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Discord Identity</label>
+                    <input type="text" id="discord_user" readonly class="w-full px-4 py-2.5 rounded text-slate-400 text-sm cursor-not-allowed">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">UCP Account</label>
+                    <input type="text" id="ucp" required placeholder="User Control Panel" class="w-full px-4 py-2.5 rounded text-white text-sm">
                 </div>
             </div>
-            <h1 class="text-2xl font-bold text-white tracking-tight">INTERNAL AFFAIRS DIVISION</h1>
-            <p class="text-blue-400 text-xs font-semibold tracking-widest uppercase mt-1">Professional Standards Bureau</p>
-            <div class="h-px bg-slate-700 w-full mt-6"></div>
-        </div>
 
-        <!-- Section 1: Login -->
-        <div id="loginSection" class="text-center py-10">
-            <h2 class="text-slate-300 mb-6 font-medium">Autentikasi Diperlukan untuk Mengakses Formulir</h2>
-            <button id="loginBtn" class="btn-primary w-full max-w-xs py-3 px-6 rounded-lg text-white font-bold flex items-center justify-center gap-3 mx-auto">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.086 2.157 2.419c0 1.334-.966 2.419-2.156 2.419zm7.974 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.086 2.157 2.419c0 1.334-.946 2.419-2.157 2.419z""")/>></svg>
-                LOGIN WITH DISCORD
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Nama Pelapor (IC)</label>
+                    <input type="text" id="nama_pelapor" required class="w-full px-4 py-2.5 rounded text-white text-sm">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Nama Terlapor (Petugas)</label>
+                    <input type="text" id="nama_terlapor" required class="w-full px-4 py-2.5 rounded text-white text-sm">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Dugaan Pelanggaran Kode Etik</label>
+                <select id="pasal" required class="w-full px-4 py-2.5 rounded text-white text-sm">
+                    <option value="">-- Pilih Klasifikasi Pelanggaran --</option>
+                    <option value="Excessive Force (Penggunaan Kekuatan Berlebihan)">Excessive Force</option>
+                    <option value="Corruption / Bribery (Suap & Korupsi)">Corruption / Bribery</option>
+                    <option value="Unprofessional Conduct (Tindakan Tidak Profesional)">Unprofessional Conduct</option>
+                    <option value="False Arrest (Penangkapan Ilegal)">False Arrest</option>
+                    <option value="Abuse of Authority (Penyalahgunaan Wewenang)">Abuse of Authority</option>
+                </select>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Kronologi Kejadian</label>
+                <textarea id="kronologi" rows="4" required placeholder="Deskripsikan kejadian secara kronologis..." class="w-full px-4 py-2.5 rounded text-white text-sm"></textarea>
+            </div>
+
+            <!-- UPDATE: BAGIAN BUKTI DOKUMENTASI GANDA -->
+            <div class="space-y-2">
+                <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Dokumentasi Bukti (Lampiran & Tautan)</label>
+                <div class="flex flex-col md:flex-row gap-3">
+                    <!-- Input File -->
+                    <div class="flex-1 relative">
+                        <input type="file" id="bukti_file" class="hidden" accept="image/*,video/*">
+                        <label for="bukti_file" class="flex items-center justify-between w-full px-4 py-2.5 rounded bg-[#0f172a] border border-dashed border-slate-600 text-slate-400 text-[13px] cursor-pointer hover:bg-slate-800 transition-all">
+                            <span id="file_label_text" class="truncate">Pilih File (Foto/Video)</span>
+                            <svg class="w-4 h-4 text-blue-500 shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        </label>
+                    </div>
+                    <!-- Input Link -->
+                    <div class="flex-1">
+                        <input type="url" id="bukti_link" placeholder="Atau Tempel Link (YouTube/Imgur)" class="w-full px-4 py-2.5 rounded text-white text-sm bg-[#0f172a] border border-[#334155] focus:border-blue-500 outline-none">
+                    </div>
+                </div>
+                <p class="text-[9px] text-slate-500 italic mt-1">*Lampirkan file secara langsung atau gunakan tautan pihak ketiga.</p>
+            </div>
+
+            <div class="bg-blue-900/20 border border-blue-800/30 p-4 rounded-lg flex items-start gap-4">
+                <input type="checkbox" id="setuju" required class="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-900 text-blue-600">
+                <label for="setuju" class="text-[11px] leading-relaxed text-slate-400 italic">
+                    Laporan ini merupakan dokumen resmi departemen. Segala bentuk keterangan palsu dapat dikenakan sanksi hukum sesuai dengan regulasi Internal Affairs Division. Dengan mengirimkan ini, saya menyatakan data di atas adalah benar.
+                </label>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-primary w-full py-4 rounded font-bold text-white uppercase tracking-widest text-sm transition-all">
+                KIRIM LAPORAN RESMI
             </button>
-        </div>
-
-        <!-- Section 2: Form Laporan -->
-        <div id="formSection" class="hidden">
-            <form id="reportForm" class="space-y-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Discord Identity</label>
-                        <input type="text" id="discord_user" readonly class="w-full px-4 py-2.5 rounded text-slate-400 text-sm cursor-not-allowed">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">UCP Account</label>
-                        <input type="text" id="ucp" required placeholder="User Control Panel" class="w-full px-4 py-2.5 rounded text-white text-sm">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Nama Pelapor (IC)</label>
-                        <input type="text" id="nama_pelapor" required class="w-full px-4 py-2.5 rounded text-white text-sm">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Nama Terlapor (Petugas)</label>
-                        <input type="text" id="nama_terlapor" required class="w-full px-4 py-2.5 rounded text-white text-sm">
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Dugaan Pelanggaran Kode Etik</label>
-                    <select id="pasal" required class="w-full px-4 py-2.5 rounded text-white text-sm">
-                        <option value="">-- Pilih Klasifikasi Pelanggaran --</option>
-                        <option value="Excessive Force (Penggunaan Kekuatan Berlebihan)">Excessive Force</option>
-                        <option value="Corruption / Bribery (Suap & Korupsi)">Corruption / Bribery</option>
-                        <option value="Unprofessional Conduct (Tindakan Tidak Profesional)">Unprofessional Conduct</option>
-                        <option value="False Arrest (Penangkapan Ilegal)">False Arrest</option>
-                        <option value="Abuse of Authority (Penyalahgunaan Wewenang)">Abuse of Authority</option>
-                    </select>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Kronologi Kejadian</label>
-                    <textarea id="kronologi" rows="4" required placeholder="Deskripsikan kejadian secara kronologis..." class="w-full px-4 py-2.5 rounded text-white text-sm"></textarea>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Tautan Bukti Dokumentasi</label>
-                    <input type="url" id="bukti" required placeholder="https://imgur.com atau ://youtube.com..." class="w-full px-4 py-2.5 rounded text-white text-sm">
-                </div>
-
-                <div class="bg-blue-900/20 border border-blue-800/30 p-4 rounded-lg flex items-start gap-4">
-                    <input type="checkbox" id="setuju" required class="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-900 text-blue-600">
-                    <label for="setuju" class="text-[11px] leading-relaxed text-slate-400 italic">
-                        Laporan ini merupakan dokumen resmi departemen. Segala bentuk keterangan palsu dapat dikenakan sanksi hukum sesuai dengan regulasi Internal Affairs Division. Dengan mengirimkan ini, saya menyatakan data di atas adalah benar.
-                    </label>
-                </div>
-
-                <button type="submit" id="submitBtn" class="btn-primary w-full py-4 rounded font-bold text-white uppercase tracking-widest text-sm transition-all">
-                    KIRIM LAPORAN RESMI
-                </button>
-            </form>
-        </div>
-
-        <div class="mt-8 text-center">
-            <p class="text-[9px] text-slate-600 font-bold uppercase tracking-[.25em]">Copyright © 2026 Internal Affairs Division. Confidential Document.</p>
-        </div>
+        </form>
     </div>
+
+    <div class="mt-8 text-center">
+        <p class="text-[9px] text-slate-600 font-bold uppercase tracking-[.25em]">Copyright © 2026 Internal Affairs Division. Confidential Document.</p>
+    </div>
+</div>
+
+
 
 <script>
 // --- KONFIGURASI ---
-const clientId = '1383312431253815378'; // ID kamu
+const clientId = '1383312431253815378'; 
 const redirectUri = window.location.origin + window.location.pathname;
 const webhookURL = "MASUKKAN_URL_WEBHOOK_DISCORD_DI_SINI"; 
 
@@ -154,8 +170,13 @@ document.getElementById('loginBtn').onclick = function(){
   window.location.href = url;
 }
 
+// Menampilkan nama file saat dipilih
+document.getElementById('bukti_file').onchange = function() {
+    const fileName = this.files.length > 0 ? this.files[0].name : "Pilih File (Foto/Video)";
+    document.getElementById('file_label_text').innerText = fileName;
+};
+
 window.onload = async function(){
-  // Tangkap token dari URL
   if (window.location.hash && window.location.hash.includes('access_token')){
     const params = new URLSearchParams(window.location.hash.substring(1));
     const token = params.get('access_token');
@@ -171,63 +192,79 @@ window.onload = async function(){
         const r = await fetch('https://discord.com/api/users/@me', {
             headers: { Authorization: 'Bearer ' + token }
         });
-        
         if(r.ok){
             const user = await r.json();
-            // User berhasil login, tampilkan form & isi username otomatis
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('formSection').classList.remove('hidden');
             document.getElementById('discord_user').value = `${user.username} (ID: ${user.id})`;
         } else {
             localStorage.removeItem('discord_token');
         }
-    } catch(e) {
-        console.error("Gagal ambil data Discord", e);
-    }
+    } catch(e) { console.error("Gagal ambil data Discord", e); }
   }
 }
 
-// --- KIRIM DATA KE WEBHOOK ---
+// --- PERBAIKAN PENGIRIMAN BUKTI (FILE & LINK) ---
 document.getElementById('reportForm').onsubmit = async function(e){
     e.preventDefault();
-    const btn = e.target.querySelector('button');
+    const btn = document.getElementById('submitBtn');
+    const fileInput = document.getElementById('bukti_file');
+    const linkInput = document.getElementById('bukti_link');
+    
     btn.disabled = true;
-    btn.innerText = "Mengirim...";
+    btn.innerText = "SEDANG MENGIRIM DOKUMEN & MEDIA...";
 
-    const payload = {
-        username: "IA Division Logs",
+    // 1. Buat Payload Embed
+    const payloadJson = {
+        username: "INTERNAL AFFAIRS DISPATCH",
         avatar_url: "https://i.imgur.com",
         embeds: [{
-            title: "📩 LAPORAN BARU MASUK",
-            color: 15548997, // Warna Merah
+            title: "⚖️ OFFICIAL MISCONDUCT REPORT",
+            color: 15158332,
             fields: [
-                { name: "👤 Pengguna Discord", value: document.getElementById('discord_user').value },
+                { name: "🛡️ Pelapor (Discord)", value: `\`${document.getElementById('discord_user').value}\`` },
                 { name: "🆔 UCP Account", value: document.getElementById('ucp').value, inline: true },
-                { name: "📝 Nama Pelapor (IC)", value: document.getElementById('nama_pelapor').value, inline: true },
+                { name: "👤 Nama IC Pelapor", value: document.getElementById('nama_pelapor').value, inline: true },
                 { name: "👮 Nama Terlapor", value: document.getElementById('nama_terlapor').value },
-                { name: "⚖️ Jenis Pelanggaran", value: document.getElementById('pasal').value },
-                { name: "📖 Kronologi", value: document.getElementById('kronologi').value },
-                { name: "🔗 Link Bukti", value: document.getElementById('bukti').value }
+                { name: "📋 Klasifikasi", value: `**${document.getElementById('pasal').value}**` },
+                { name: "📜 Kronologi", value: document.getElementById('kronologi').value },
+                { name: "🔗 Link Bukti", value: linkInput.value || "Tidak ada link tambahan" }
             ],
-            footer: { text: "Internal Affairs Division - Automated Report" },
+            footer: { text: "IAD-OPS Automated Records Manager" },
             timestamp: new Date()
         }]
     };
 
+    // 2. Gunakan FormData untuk mendukung Upload File
+    const formData = new FormData();
+    
+    // Jika ada file yang dipilih, masukkan ke form data
+    if (fileInput.files.length > 0) {
+        formData.append('file', fileInput.files[0]);
+    }
+
+    // Masukkan JSON laporan ke dalam form data
+    formData.append('payload_json', JSON.stringify(payloadJson));
+
     try {
-        await fetch(webhookURL, {
+        const response = await fetch(webhookURL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: formData // Pengiriman otomatis menjadi multipart/form-data
         });
-        alert("Laporan berhasil terkirim ke Internal Affairs!");
-        location.reload();
+
+        if (response.ok) {
+            alert("SUKSES: Laporan Resmi dan Bukti telah diarsipkan ke sistem IAD.");
+            location.reload();
+        } else {
+            throw new Error("Gagal mengirim");
+        }
     } catch(err) {
-        alert("Gagal mengirim laporan. Cek koneksi atau Webhook URL.");
+        alert("GAGAL MENGIRIM: File mungkin terlalu besar (Maks 8MB) atau Webhook salah.");
         btn.disabled = false;
-        btn.innerText = "KIRIM LAPORAN SEKARANG";
+        btn.innerText = "KIRIM LAPORAN RESMI";
     }
 }
 </script>
+
 </body>
 </html>
