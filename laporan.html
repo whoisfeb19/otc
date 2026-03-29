@@ -3,163 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IAD - Internal Affairs</title>
+    <title>IAD - Internal Affairs Division</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com">
     <style>
+        @import url('https://fonts.googleapis.com');
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
         .hidden { display: none; }
-        body { background-color: #0f172a; color: #e2e8f0; font-family: sans-serif; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- 1. HALAMAN LOGIN -->
-    <div id="login-page" class="max-w-md w-full bg-slate-800 p-8 rounded-xl shadow-2xl border-t-4 border-blue-600 text-center">
-        <img src="https://www.freeiconspng.com" alt="Logo" class="w-20 mx-auto mb-4">
-        <h1 class="text-2xl font-bold mb-2">INTERNAL AFFAIRS</h1>
-        <p class="text-slate-400 mb-8 text-sm text-balance">Gunakan akun Discord Anda untuk mengakses portal pengaduan resmi anggota kepolisian.</p>
+    <!-- CONTAINER UTAMA -->
+    <div class="max-w-2xl w-full">
         
-        <button onclick="handleLogin()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-3">
-            <img src="https://cdn-icons-png.flaticon.com" class="w-5 h-5 invert">
-            MASUK DENGAN DISCORD
-        </button>
-    </div>
-
-    <!-- 2. HALAMAN FORM -->
-    <div id="form-page" class="hidden max-w-2xl w-full bg-slate-800 rounded-xl shadow-2xl border border-slate-700 overflow-hidden">
-        <div class="bg-blue-700 p-4 font-bold text-center text-white tracking-widest text-sm uppercase">
-            Formulir Pengaduan Pelanggaran Anggota
-        </div>
-        
-        <form id="reportForm" class="p-6 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div>
-                    <label class="block text-slate-500 mb-1">Username Discord</label>
-                    <input type="text" id="display-username" disabled class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-blue-400 font-mono cursor-not-allowed">
+        <!-- 1. TAMPILAN LOGIN -->
+        <div id="login-section" class="glass rounded-2xl p-8 text-center shadow-2xl border-t-4 border-blue-500">
+            <div class="mb-6">
+                <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/20">
+                    <i class="fas fa-shield-halved text-4xl text-white"></i>
                 </div>
-                <div>
-                    <label class="block text-slate-400 mb-1 font-semibold">User Control Panel (UCP)</label>
-                    <input type="text" id="ucp" required placeholder="Nama Akun UCP" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight">INTERNAL AFFAIRS</h1>
+                <p class="text-slate-400 mt-2">Portal Pengaduan Pelanggaran Anggota Kepolisian</p>
+            </div>
+            
+            <div class="bg-slate-900/50 p-4 rounded-lg mb-8 text-sm text-slate-300 border border-slate-700">
+                <i class="fas fa-info-circle mr-2 text-blue-400"></i>
+                Silakan autentikasi menggunakan Discord untuk memverifikasi identitas Anda sebagai pelapor resmi.
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div>
-                    <label class="block text-slate-400 mb-1 font-semibold">Nama Pelapor (IC)</label>
-                    <input type="text" id="nama-pelapor" required placeholder="Nama Karakter Anda" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-slate-400 mb-1 font-semibold">Nama Terlapor (Polisi)</label>
-                    <input type="text" id="nama-terlapor" required placeholder="Nama/Pangkat Oknum" class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-            </div>
-
-            <div class="text-sm">
-                <label class="block text-slate-400 mb-1 font-semibold">Dugaan Pasal Pelanggaran</label>
-                <select id="pasal" required class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option value="" disabled selected>-- Pilih Pelanggaran --</option>
-                    <option value="Penyalahgunaan Senjata">Penyalahgunaan Senjata</option>
-                    <option value="Korupsi & Suap">Korupsi & Suap</option>
-                    <option value="Brutalitas / Kekerasan Berlebih">Brutalitas / Kekerasan Berlebih</option>
-                    <option value="Pelanggaran Kode Etik">Pelanggaran Kode Etik</option>
-                </select>
-            </div>
-
-            <div class="text-sm">
-                <label class="block text-slate-400 mb-1 font-semibold">Kronologi Singkat</label>
-                <textarea id="kronologi" rows="3" required placeholder="Jelaskan kejadian secara rinci..." class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
-            </div>
-
-            <div class="text-sm">
-                <label class="block text-slate-400 mb-1 font-semibold">Bukti Link (Imgur/YouTube)</label>
-                <input type="url" id="bukti" required placeholder="https://..." class="w-full bg-slate-700 border border-slate-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <div class="flex items-start gap-2 bg-slate-900/50 p-3 rounded border border-slate-700">
-                <input type="checkbox" id="confirm" required class="mt-1">
-                <label for="confirm" class="text-[10px] text-slate-400 uppercase leading-relaxed font-bold">
-                    Laporan ini resmi. Pihak IAD berhak memproses dan menuntut pembuktian lebih lanjut.
-                </label>
-            </div>
-
-            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded font-bold transition">
-                KIRIM LAPORAN KE IAD
+            <button onclick="startDiscordAuth()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg">
+                <i class="fab fa-discord text-xl"></i>
+                MASUK AJA
             </button>
-        </form>
+        </div>
+
+        <!-- 2. TAMPILAN FORMULIR -->
+        <div id="form-section" class="hidden glass rounded-2xl overflow-hidden shadow-2xl">
+            <div class="bg-blue-600 p-4 flex items-center justify-between">
+                <span class="font-bold flex items-center gap-2">
+                    <i class="fas fa-file-signature"></i> FORMULIR PENGADUAN
+                </span>
+                <span id="user-badge" class="bg-blue-800 text-[10px] px-2 py-1 rounded-full border border-blue-400">VERIFIED</span>
+            </div>
+
+            <form id="iadForm" class="p-8 space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-400 uppercase">Username Discord</label>
+                        <input type="text" id="discord_user" value="Memuat..." disabled class="w-full bg-slate-900/50 border border-slate-700 rounded-lg p-3 text-blue-400 font-mono text-sm">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-400 uppercase">UCP Account</label>
+                        <input type="text" id="ucp_name" required placeholder="Contoh: Budi_Gamer" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 focus:border-blue-500 outline-none transition text-sm">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-400 uppercase">Nama Pelapor (IC)</label>
+                        <input type="text" id="ic_pelapor" required placeholder="Nama Karakter Anda" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 focus:border-blue-500 outline-none transition text-sm">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-400 uppercase">Nama Terlapor (Polisi)</label>
+                        <input type="text" id="ic_terlapor" required placeholder="Nama/Pangkat Oknum" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 focus:border-blue-500 outline-none transition text-sm">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-400 uppercase">Jenis Pelanggaran</label>
+                    <select id="kategori" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 focus:border-blue-500 outline-none transition text-sm">
+                        <option value="" disabled selected>Pilih Kategori...</option>
+                        <option value="Abuse of Power">Abuse of Power (Penyalahgunaan Wewenang)</option>
+                        <option value="Corruption">Corruption (Korupsi/Suap)</option>
+                        <option value="Police Brutality">Police Brutality (Kekerasan Fisik)</option>
+                        <option value="Ethics Violation">Pelanggaran Kode Etik/SOP</option>
+                    </select>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-400 uppercase">Kronologi Kejadian</label>
+                    <textarea id="kronologi" rows="4" required placeholder="Jelaskan detail kejadian, waktu, dan lokasi..." class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 focus:border-blue-500 outline-none transition text-sm"></textarea>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-400 uppercase">Link Bukti (YouTube/Imgur)</label>
+                    <input type="url" id="bukti_link" required placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 focus:border-blue-500 outline-none transition text-sm">
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" id="btnKirim" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i> SUBMIT LAPORAN
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
-    // --- 1. KONFIGURASI ---
-    const CLIENT_ID = "1383312431253815378";
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1461782776968908887/vHaIRDh8JLSiJyeDseSgUH2Bk_EfOBWj25YmMEmadzFLaWmhgpRxZVfH1sD6d3IP0Zzc";
-    // Menggunakan location.href tanpa query string untuk redirect
-    const REDIRECT_URI = window.location.origin + window.location.pathname;
-
-    // --- 2. LOGIKA LOGIN ---
-    function handleLogin() {
-        // PERBAIKAN: Format URL OAuth2 yang benar
-        const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
-        window.location.href = authUrl;
-    }
-
-    // --- 3. CEK LOGIN (Cek apakah ada parameter 'code' di URL) ---
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-
-    if (code) {
-        // Jika ada code, sembunyikan login dan tampilkan form
-        document.getElementById('login-page').classList.add('hidden');
-        document.getElementById('form-page').classList.remove('hidden');
-        document.getElementById('display-username').value = "TERVERIFIKASI DISCORD";
-    }
-
-    // --- 4. KIRIM FORM KE WEBHOOK ---
-    document.getElementById('reportForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('btnSubmit');
-        
-        // Proteksi double click
-        btn.innerText = "SEDANG MENGIRIM...";
-        btn.disabled = true;
-
-        const payload = {
-            username: "SISTEM IAD",
-            avatar_url: "https://www.freeiconspng.com",
-            embeds: [{
-                title: "🚨 LAPORAN PELANGGARAN BARU",
-                color: 15158332, // Warna Merah
-                fields: [
-                    { name: "👤 User Control Panel (UCP)", value: `\`${document.getElementById('ucp').value}\``, inline: true },
-                    { name: "📝 Nama Pelapor (IC)", value: document.getElementById('nama-pelapor').value, inline: true },
-                    { name: "👮 Nama Terlapor", value: document.getElementById('nama-terlapor').value, inline: true },
-                    { name: "⚖️ Dugaan Pasal", value: document.getElementById('pasal').value },
-                    { name: "📖 Kronologi Kejadian", value: document.getElementById('kronologi').value },
-                    { name: "🔗 Bukti Pendukung", value: document.getElementById('bukti').value }
-                ],
-                footer: { text: "Internal Affairs Division - Portal Pengaduan" },
-                timestamp: new Date()
-            }]
+        /** 
+         * KONFIGURASI UTAMA
+         * Ganti CLIENT_ID dengan ID Aplikasi Discord Anda
+         * Ganti WEBHOOK_URL dengan Webhook channel Discord Anda
+         */
+        const CONFIG = {
+            clientId: "1383312431253815378",
+            webhookUrl: "https://discord.com/api/webhooks/1461782776968908887/vHaIRDh8JLSiJyeDseSgUH2Bk_EfOBWj25YmMEmadzFLaWmhgpRxZVfH1sD6d3IP0Zzc",
+            redirectUri: window.location.origin + window.location.pathname
         };
 
-        try {
-            const res = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if(res.ok) {
-                alert("Laporan Anda berhasil dikirim ke tim IAD.");
-                // Bersihkan URL dari parameter 'code' dan kembali ke halaman utama
-                window.location.href = REDIRECT_URI;
-            } else {
-                throw new Error("Gagal mengirim");
-            }
-        } catch (err) {
-            alert("Terjadi kesalahan saat mengirim laporan. Pastikan koneksi stabil.");
-            btn.disabled = false;
-            btn.innerText = "KIRIM LAPORAN KE IAD";
+        // 1. Fungsi Login (Sudah diperbaiki total)
+        function startDiscordAuth() {
+            const base = "https://discord.com";
+            const queries = [
+                `client_id=${CONFIG.clientId}`,
+                `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}`,
+                `response_type=code`,
+                `scope=identify`
+            ].join('&');
+            
+            window.location.href = base + "?" + queries;
         }
-    });
+
+        // 2. Cek apakah user baru kembali dari Discord (Cek Parameter 'code')
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('code')) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('form-section').classList.remove('hidden');
+                document.getElementById('discord_user').value = "User Terverifikasi";
+            }
+        };
+
+        // 3. Logika Pengiriman Form
+        document.getElementById('iadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnKirim');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> MENGIRIM...`;
+
+            // Susun Data untuk Discord Webhook
+            const embedData = {
+                username: "IAD SYSTEM MONITOR",
+                avatar_url: "https://www.freeiconspng.com",
+                embeds: [{
+                    title: "🚨 LAPORAN MASUK: INTERNAL AFFAIRS DIVISION",
+                    description: "Seorang warga telah mengirimkan laporan pengaduan anggota.",
+                    color: 0xDC2626, // Merah
+                    fields: [
+                        { name: "👤 Info Pelapor", value: `**UCP:** ${document.getElementById('ucp_name').value}\n**IC Name:** ${document.getElementById('ic_pelapor').value}`, inline: true },
+                        { name: "👮 Terlapor", value: `**Nama/Pangkat:**\n${document.getElementById('ic_terlapor').value}`, inline: true },
+                        { name: "⚖️ Kategori Pelanggaran", value: document.getElementById('kategori').value },
+                        { name: "📖 Kronologi", value: document.getElementById('kronologi').value },
+                        { name: "🔗 Link Bukti", value: `[Klik di Sini](${document.getElementById('bukti_link').value})` }
+                    ],
+                    footer: { text: "Sistem Pengaduan IAD • " + new Date().toLocaleString() }
+                }]
+            };
+
+            try {
+                const response = await fetch(CONFIG.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(embedData)
+                });
+
+                if (response.ok) {
+                    alert("✅ Laporan Berhasil Terkirim!\nTim Internal Affairs akan segera memproses laporan Anda.");
+                    window.location.href = CONFIG.redirectUri; // Kembali ke halaman login bersih
+                } else {
+                    throw new Error();
+                }
+            } catch (err) {
+                alert("❌ Gagal Mengirim!\nPastikan Webhook URL Anda benar.");
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-paper-plane"></i> SUBMIT LAPORAN`;
+            }
+        });
     </script>
 </body>
 </html>
