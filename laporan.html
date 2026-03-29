@@ -106,7 +106,7 @@
     function loginDiscord() {
         const scope = 'identify';
         // Menyusun URL dengan template literals yang lebih aman
-        const authUrl = `https://discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${scope}`;
+        const authUrl = `https://discord.com/oauth2/authorize?client_id={CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${scope}`;
         
         window.location.href = authUrl;
     }
