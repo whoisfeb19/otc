@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>KUHP KOTAKU AMANDEMEN KE 6 TAHUN 2026</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 20px;}
+        h2 { margin-top: 40px; }
+        table { border-collapse: collapse; width: 100%; background: #fff; margin-bottom: 40px; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left;}
+        th { color: #fff;}
+        tbody {
+  position: relative;
+  background: #fffbe8; /* warna background tabel, bisa diganti */
+}
+
+tbody::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('../policelogo.png') center center no-repeat;
+  background-size: contain;
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+tbody tr, tbody td {
+  position: relative;
+  z-index: 1;
+  background: transparent; /* pastikan tidak ada background lain */
+}
+        .llaj th { background-color: #0074c2; }
+        .pidana th { background-color: #388e3c; }
+        .properti th { background-color: #ffa000; }
+        .khusus th { background-color: #2196f3; }
+        .darurat th { background-color: #b71c1c; }
+        .peperangan th { background-color: #455a64; }
+        .tipikor th { background-color: #e65100; }
+        .terorisme th { background-color: #263238; }
+        .penyanderaan th {background-color: #ffa000;}
+        .ite th {background-color: #2196f3;}
+        /* Responsive Table Wrapper */
+        .responsive-table-wrapper {
+          width: 100%;
+          overflow-x: auto;
+        }
+        .responsive-table-wrapper table {
+          min-width: 600px;
+        }
+        /* Download Button Group */
+        .download-btn-group {
+          display: flex;
+          gap: 12px;
+          margin: 18px 0 32px 0;
+          flex-wrap: wrap;
+        }
+        .btn-download {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          background: #0074c2;
+          color: #fff;
+          border: none;
+          padding: 11px 22px;
+          font-size: 16px;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .btn-download:hover {
+          background: #005a97;
+        }
+        @media (max-width: 600px) {
+          .download-btn-group {
+            flex-direction: column;
+            gap: 8px;
+          }
+          .btn-download {
+            width: 100%;
+            justify-content: center;
+            font-size: 15px;
+            padding: 12px 0;
+          }
+        }
+        .table-block { margin-bottom: 64px; }
+        #search-container {
+            margin-bottom: 32px;
+        }
+        #search-box {
+            width: 350px;
+            padding: 10px 14px;
+            font-size: 17px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            margin-right: 12px;
+        }
+        #clear-search {
+            padding: 10px 16px;
+            font-size: 17px;
+            border: none;
+            border-radius: 6px;
+            background: #ffa000;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #clear-search:hover {
+            background: #e69500;
+        }
+        .highlight {
+            background: #fff59d !important;
+            color: #333 !important;
+            font-weight: bold;
+        }
+
+        /* tombol selector*/
+        .fab-container {
+        position: fixed;
+        right: 30px;
+        bottom: 30px;
+        z-index: 100;
+        }
+
+        .fab-btn {
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        font-size: 26px;
+        cursor: pointer;
+        transition: background 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+        }
+
+        .fab-btn:hover {
+        background: #388e3c;
+        }
+
+        .fab-selector {
+        display: none;
+        position: fixed; /* agar selalu di atas & tidak dipotong elemen lain */
+        right: 30px;
+        bottom: 100px; /* beri jarak dari tombol FAB */
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+        min-width: 260px;
+        z-index: 9999; /* sangat tinggi agar tidak tertutup elemen lain */
+        max-height: 60vh; /* batasi tinggi menu */
+        overflow-y: auto; /* scroll jika menu panjang */
+        overflow-x: hidden;
+        padding: 0;
+        }
+
+        .fab-selector ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        }
+
+        .fab-selector ul li {
+        display: flex;
+        align-items: center;
+        padding: 16px 20px;
+        font-size: 16px;
+        color: #222;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        user-select: none;
+        }
+
+        .fab-selector ul li:hover,
+        .fab-selector ul li:focus {
+        background: #f2f2f2;
+        }
+
+        .fab-selector .material-icons {
+        font-size: 24px;
+        margin-right: 14px;
+        color: #388e3c;
+        }
+
+        .uu-block {
+        margin: 40px auto;
+        max-width: 900px;
+        padding: 20px 10px 20px 10px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        /* Table for batas maksimal & klasifikasi */
+        .batas-maximal th,
+        .batas-maximal td,
+        .klasifikasi-uu th,
+        .klasifikasi-uu td {
+          border: 1px solid #bbb;
+          padding: 8px 10px;
+          font-size: 15px;
+          text-align: left;
+        }
+        .batas-maximal th,
+        .klasifikasi-uu th {
+          background: #263238;
+          color: #fff;
+          font-weight: bold;
+        }
+        .batas-maximal tr:nth-child(even),
+        .klasifikasi-uu tr:nth-child(even) {
+          background: #f6f6f6;
+        }
+        .batas-maximal {
+          margin-bottom: 18px;
+        }
+        @media (max-width: 600px) {
+        .fab-container {
+            right: 10px;
+            bottom: 10px;
+        }
+        .fab-selector {
+            right: 10px;
+            min-width: 200px;
+        }
+        .uu-block {
+            max-width: 100%;
+            padding: 10px 4px;
+        }
+        .responsive-table-wrapper table,
+        .batas-maximal,
+        .klasifikasi-uu {
+            font-size: 13px;
+            min-width: 420px;
+        }
+        .responsive-table-wrapper th, 
+        .responsive-table-wrapper td,
+        .batas-maximal th, .batas-maximal td,
+        .klasifikasi-uu th, .klasifikasi-uu td {
+            padding: 6px 4px;
+        }
+        }
+
+        .watermark-tbody {
+        background: url('policelogo.png') center center no-repeat;
+        background-size: 60%; /* atur sesuai kebutuhan */
+        position: relative;
+    
+        }
+        .watermark-tbody tr {
+        position: relative;
+        z-index: 1;
+        }
+
+        .copyright-text-bawah {
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        color: #222;
+        opacity: 0.28;
+        letter-spacing: 1px;
+        font-weight: bold;
+        margin-top: 6px;
+        }
+        *, *:before, *:after {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+      }
+    </style>
+    <script>
+    // Prevent copy, cut, paste, right-click
+    window.onload = function(){
+      document.addEventListener('copy', e => e.preventDefault());
+      document.addEventListener('cut', e => e.preventDefault());
+      document.addEventListener('paste', e => e.preventDefault());
+      document.addEventListener('contextmenu', e => e.preventDefault());
+      document.addEventListener('dragstart', e => e.preventDefault());
+    };
+  </script>
+</head>
+<body>
+    
+    <!-- Tombol Download yang rapi -->
+    <div class="download-btn-group">
+      <button id="download" class="btn-download"><span class="material-icons" style="vertical-align:middle;">file_download</span> Download HTML</button>
+      <button id="download-img" class="btn-download"><span class="material-icons" style="vertical-align:middle;">image</span> Download Gambar</button>
+    </div>
+
+    <div id="search-container">
+        <input type="text" id="search-box" placeholder="Cari pasal, jenis pelanggaran, denda, hukuman, atau isi pasal ...">
+        <button id="clear-search" type="button">Reset</button>
+    </div>
+
+<h1> KITAB UNDANG UNDANG HUKUM PIDANA KOTAKU AMANDEMEN KE 6 TAHUN 2026</h1>
+<div id="tabel-pasal">
+    <!-- UU 1 -->
+    <div class="table-block">
+        <div id="uu1">
+        <h2>UNDANG-UNDANG NOMOR 1 TAHUN 2026 TENTANG LALU LINTAS DAN ANGKUTAN JALAN</h2>
+        <table class="llaj">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>A1</td><td>Mengemudi tanpa helm</td><td>100</td><td>Penilangan</td><td>Setiap orang yang mengemudi kendaraan roda dua tanpa helm standar akan dikenai denda $200 dan penilangan oleh petugas.</td></tr>
+                <tr><td>A2</td><td>Tidak memiliki SIM</td><td>150</td><td>Penilangan</td><td>Setiap orang yang mengemudi tanpa SIM akan dikenai denda $300 dan penilangan.</td></tr>
+                <tr><td>A3</td><td>Kendaraan tanpa plat</td><td>200</td><td>Penilangan</td><td>Setiap kendaraan tanpa plat nomor polisi akan dikenai denda $400 dan penilangan.</td></tr>
+                <tr><td>A4</td><td>Parkir sembarangan</td><td>300</td><td>Impound 1 hari</td><td>Parkir di tempat terlarang dikenai denda $600 dan impound 1 hari.</td></tr>
+                <tr><td>A5</td><td>Kendaraan di zona terlarang</td><td>350</td><td>Impound 1 hari</td><td>Kendaraan yang memasuki zona larangan tanpa izin dikenai denda $700 dan impound 1 hari.</td></tr>
+                <tr><td>A6</td><td>Tidak membayar tol</td><td>400</td><td>Impound 1 hari</td><td>Melewati tol tanpa bayar dikenai denda $800 dan impound 2 hari.</td></tr>
+                <tr><td>A7</td><td>Melawan arus jalan</td><td>450</td><td>Impound 1 hari</td><td>Melawan arus lalu lintas dikenai denda $900 dan impound 2 hari.</td></tr>
+                <tr><td>A8</td><td>Speeding/ngebut</td><td>475</td><td>Impound 1 hari</td><td>Melebihi batas kecepatan dikenai denda $950 dan impound 2 hari.</td></tr>
+                <tr><td>A9</td><td>Berkendara ugal-ugalan</td><td>500</td><td>Impound 1 hari</td><td>Mengemudi ugal-ugalan dikenai denda $1,000 dan impound 2 hari.</td></tr>
+                <tr><td>A10</td><td>Kabur saat razia</td><td>750</td><td>Impound 1 hari</td><td>Kabur saat razia lalu lintas dikenai denda $1,500 dan impound 2 hari.</td></tr>
+                <tr><td>A11</td><td>Balapan liar</td><td>1000</td><td>Jail 10 bulan</td><td>Balapan liar di jalan umum dikenai denda $2,000 dan penjara 15 bulan.</td></tr>
+                <tr><td>A12</td><td>Truck di area keramaian</td><td>700</td><td>Impound 1 hari</td><td>Truk masuk ke area keramaian tanpa izin dikenai denda $1,400 dan impound 2 hari.</td></tr>
+                <tr><td>A13</td><td>Kendaraan di TKP peperangan</td><td>1000</td><td>Impound 2 hari</td><td>Kendaraan di TKP perang tanpa izin dikenai denda $2,000 dan impound 3 hari.</td></tr>
+                <tr><td>A14</td><td>Barang ilegal di kendaraan</td><td>1150</td><td>Impound 2 hari</td><td>Kendaraan membawa barang ilegal dikenai denda $2,300 dan impound 3 hari.</td></tr>
+                <tr><td>A15</td><td>Senjata di kendaraan</td><td>1400</td><td>Impound 3 hari</td><td>Kendaraan membawa senjata tanpa izin dikenai denda $2,800 dan impound 5 hari.</td></tr>
+                <tr><td>A16</td><td>Menghambat arus lalu lintas</td><td>1250</td><td>Impound 3 hari</td><td>Menghambat arus lalu lintas dikenai denda $2,500 dan impound 4 hari.</td></tr>
+                <tr><td>A17</td><td>Menghambat kendaraan prioritas</td><td>1500</td><td>Impound 3 hari</td><td>Menghalangi kendaraan prioritas dikenai denda $3,000 dan impound 4 hari.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 2 -->
+    <div class="table-block">
+        <div id="uu2">
+        <h2>UNDANG-UNDANG NOMOR 2 TAHUN 2026 TENTANG TINDAK PIDANA UMUM</h2>
+        <table class="pidana">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>B1</td><td>Tidak ada identitas/KTP</td><td>250</td><td>Sanksi Sosial</td><td>Tidak dapat menunjukkan identitas resmi (KTP/SIM) dikenai denda $250 dan sanksi sosial.</td></tr>
+                <tr><td>B2</td><td>Menyalahgunakan hotline</td><td>400</td><td>Sanksi Sosial</td><td>Menyalahgunakan hotline publik dikenai denda $400 dan sanksi sosial.</td></tr>
+                <tr><td>B3</td><td>Keributan di tempat umum</td><td>600</td><td>Jail 3 bulan</td><td>Buat keributan di tempat umum dikenai denda $600 dan penjara 3 bulan.</td></tr>
+                <tr><td>B4</td><td>Pencemaran nama baik warga</td><td>750</td><td>Jail 3 bulan</td><td>Pencemaran nama baik warga lain dikenai denda $750 dan penjara 3 bulan.</td></tr>
+                <tr><td>B5</td><td>Penghinaan warga</td><td>800</td><td>Jail 3 bulan</td><td>Penghinaan terhadap warga dikenai denda $800 dan penjara 3 bulan.</td></tr>
+                <tr><td>B6</td><td>Pencemaran nama baik instansi</td><td>900</td><td>Jail 4 bulan</td><td>Pencemaran nama baik instansi dikenai denda $900 dan penjara 4 bulan.</td></tr>
+                <tr><td>B7</td><td>Penghinaan instansi</td><td>1000</td><td>Jail 4 bulan</td><td>Penghinaan terhadap instansi dikenai denda $1,000 dan penjara 4 bulan.</td></tr>
+                <tr><td>B8</td><td>Merusak fasilitas umum</td><td>1250</td><td>Jail 5 bulan</td><td>Merusak fasilitas umum dikenai denda $1,250 dan penjara 5 bulan.</td></tr>
+                <tr><td>B9</td><td>Merusak aset pribadi</td><td>1500</td><td>Jail 5 bulan</td><td>Merusak aset pribadi dikenai denda $1,500 dan penjara 5 bulan.</td></tr>
+                <tr><td>B10</td><td>Kekerasan fisik</td><td>1750</td><td>Jail 6 bulan</td><td>Kekerasan fisik dikenai denda $1,750 dan penjara 6 bulan.</td></tr>
+                <tr><td>B11</td><td>Penipuan</td><td>2000</td><td>Jail 6 bulan</td><td>Penipuan dikenai denda $2,000 dan penjara 6 bulan.</td></tr>
+                <tr><td>B12</td><td>Pelecehan seksual</td><td>2250</td><td>Jail 6 bulan</td><td>Pelecehan seksual dikenai denda $2,250 dan penjara 6 bulan.</td></tr>
+                <tr><td>B13</td><td>Memberi informasi palsu</td><td>2500</td><td>Jail 7 bulan</td><td>Memberi informasi palsu dikenai denda $2,500 dan penjara 7 bulan.</td></tr>
+                <tr><td>B14</td><td>Laporan palsu ke polisi</td><td>2750</td><td>Jail 7 bulan</td><td>Laporan palsu ke polisi dikenai denda $2,750 dan penjara 7 bulan.</td></tr>
+                <tr><td>B15</td><td>Bawa sajam/tumpul di umum</td><td>3000</td><td>Jail 8 bulan</td><td>Bawa sajam/tumpul di umum tanpa izin dikenai denda $3,000 dan penjara 8 bulan.</td></tr>
+                <tr><td>B16</td><td>Kabur saat diberhentikan</td><td>3500</td><td>Jail 9 bulan</td><td>Kabur saat diberhentikan petugas dikenai denda $3,500 dan penjara 9 bulan.</td></tr>
+                <tr><td>B17</td><td>Penyalahgunaan sajam/tumpul</td><td>4000</td><td>Jail 9 bulan</td><td>Penyalahgunaan sajam/tumpul dikenai denda $4,000 dan penjara 9 bulan.</td></tr>
+                <tr><td>B18</td><td>Pemalakan/pungli</td><td>4250</td><td>Jail 9 bulan</td><td>Pemalakan atau pungli dikenai denda $8,500 dan penjara 18 bulan.</td></tr>
+                <tr><td>B19</td><td>Perburuan ilegal satwa liar</td><td>4500</td><td>Jail 10 bulan</td><td>Setiap orang yang melakukan perburuan satwa liar tanpa izin resmi dari otoritas berwenang dikenai denda $4,500 dan penjara 10 bulan.</td></tr>
+                <tr><td>B20</td><td>Pembegalan (begal)</td><td>4750</td><td>Jail 11 bulan</td><td>Pembegalan di jalan dikenai denda $4,750 dan penjara 11 bulan.</td></tr>
+                <tr><td>B21</td><td>Menangkap, menjual, atau memiliki satwa yang dilindungi</td><td>6000</td><td>Jail 14 bulan + sita satwa</td><td>Setiap orang yang menangkap, memperdagangkan, membeli, menjual, atau memiliki satwa yang dilindungi tanpa izin dikenai denda $6,000, penjara 14 bulan, dan satwa disita negara.</td></tr>
+                <tr><td>B22</td><td>Penculikan / Perampasan kemerdekaan</td><td>7000</td><td>Jail 16 bulan</td><td>Barang siapa dengan sengaja dan dengan melawan hukum merampas orang lain kemerdekaannya, diancam dengan pidana penjara paling lama 16 bulan dan denda $7,000.</td></tr>
+                <tr><td>B23</td><td>Perampokan warung/toko</td><td>8500</td><td>Jail 18 bulan</td><td>Perampokan warung/toko dikenai denda $8,500 dan penjara 18 bulan.</td></tr>
+                <tr><td>B24</td><td>Penculikan / Perampasan kemerdekaan dengan kekerasan, berkelompok, atau mengakibatkan luka/kematian</td><td>10000</td><td>Jail 24 bulan</td><td>Jika perampasan kemerdekaan itu dilakukan dengan ancaman kekerasan atau dengan lebih dari seorang, atau mengakibatkan luka berat atau kematian, maka ancaman pidananya dapat ditambah menjadi penjara paling lama 24 bulan dan denda $10,000.</td></tr>
+                <tr><td>B25</td><td>Perampokan bank</td><td>12500</td><td>Jail 30 bulan</td><td>Perampokan bank dikenai denda $12,500 dan penjara 30 bulan.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 3 -->
+    <div class="table-block">
+        <div id="uu3">
+        <h2>UNDANG-UNDANG NOMOR 3 TAHUN 2026 TENTANG TINDAK PIDANA PROPERTI</h2>
+        <table class="properti">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>C1</td><td>Pencurian kendaraan/motor</td><td>1500</td><td>Jail 8 bulan</td><td>Pencurian kendaraan bermotor dikenai denda $1,500 dan penjara 8 bulan.</td></tr>
+                <tr><td>C2</td><td>Pencurian properti/rumah</td><td>2000</td><td>Jail 10 bulan</td><td>Pencurian properti/rumah dikenai denda $2,000 dan penjara 10 bulan.</td></tr>
+                <tr><td>C3</td><td>Penipuan jual beli kendaraan</td><td>3500</td><td>Jail 15 bulan, pengembalian kendaraan/dana ke korban</td><td>Penipuan jual beli kendaraan dikenai denda $3,500, penjara 15 bulan, dan wajib mengembalikan kendaraan/dana.</td></tr>
+                <tr><td>C4</td><td>Pemalsuan surat kendaraan</td><td>3000</td><td>Jail 10 bulan, penyitaan kendaraan</td><td>Pemalsuan surat kendaraan dikenai denda $3,000, penjara 10 bulan, dan kendaraan disita.</td></tr>
+                <tr><td>C5</td><td>Jual beli kendaraan tanpa hak</td><td>4750</td><td>Jail 15 bulan, penyitaan kendaraan</td><td>Jual beli kendaraan tanpa hak dikenai denda $4,750, penjara 15 bulan, dan kendaraan disita.</td></tr>
+                <tr><td>C6</td><td>Pencurian kendaraan import</td><td>6000</td><td>Jail 25 bulan, penyitaan kendaraan import & pengembalian ke korban</td><td>Pencurian kendaraan import dikenai denda $6,000, penjara 25 bulan, kendaraan import disita, dan dikembalikan ke korban.</td></tr>
+                
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 4 -->
+    <div class="table-block">
+        <div id="uu4">
+        <h2>UNDANG-UNDANG NOMOR 4 TAHUN 2026 TENTANG MINUMAN KERAS DAN ZAT BERALKOHOL</h2>
+        <table class="khusus">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>D1</td><td>Konsumsi minuman keras di tempat umum</td><td>1000</td><td>Jail 2 bulan</td><td>Setiap orang yang mengonsumsi minuman keras di tempat umum  akan dikenai denda $1,000 dan penjara 2 bulan.</td></tr>
+                <tr><td>D2</td><td>Menjual atau mengedarkan minuman keras tanpa izin</td><td>2000</td><td>Jail 4 bulan</td><td>Siapa saja yang menjual atau mengedarkan minuman keras akan dikenai denda $2,000 dan penjara 4 bulan.</td></tr>
+                <tr><td>D3</td><td>Mabuk di jalanan</td><td>1250</td><td>Jail 3 bulan</td><td>Orang yang menyebabkan keributan/mabuk di jalanan akibat minuman keras akan dikenai denda $1,250 dan penjara 3 bulan.</td></tr>
+                <tr><td>D4</td><td>Membawa minuman keras ke area umum</td><td>1500</td><td>Jail 3 bulan</td><td>Orang yang membawa minuman keras ke area umum (sekolah, rumah sakit, kantor pemerintahan) akan dikenai denda $1,500 dan penjara 3 bulan.</td></tr>
+                <tr><td>D5</td><td>Membuat minuman keras ilegal</td><td>3000</td><td>Jail 6 bulan</td><td>Setiap orang yang memproduksi atau meracik minuman keras akan dikenai denda $3,000 dan penjara 6 bulan.</td></tr>
+                <tr><td>D6</td><td>Memberikan minuman keras pada anak di bawah umur</td><td>4000</td><td>Jail 8 bulan</td><td>Setiap orang yang memberikan, menjual, atau membiarkan anak di bawah umur mengonsumsi minuman keras akan dikenai denda $4,000 dan penjara 8 bulan.</td></tr>
+                <tr><td>D7</td><td>Kepemilikan minuman keras</td><td>1500</td><td>Jail 3 bulan</td><td>Setiap orang yang kedapatan memiliki atau menyimpan minuman keras akan dikenai denda $1,500 dan penjara 3 bulan.</td></tr>
+                <tr><td>D8</td><td>Terlibat permufakatan pengedaran minuman keras</td><td>2500</td><td>Jail 5 bulan</td><td>Setiap orang yang terlibat dalam permufakatan, persekongkolan, atau membantu pengedaran minuman keras ilegal akan dikenai denda $2,500 dan penjara 5 bulan.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 5 -->
+    <div class="table-block">
+        <div id="uu5">
+        <h2>UNDANG-UNDANG NOMOR 5 TAHUN 2026 TENTANG NARKOTIKA DAN BARANG ILLEGAL</h2>
+        <table class="darurat">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>E1</td><td>Kepemilikan barang illegal lainnya</td><td>2500</td><td>Jail 10 bulan</td><td>Kepemilikan barang illegal lainnya dikenai denda $2,500 dan penjara 10 bulan.</td></tr>
+                <tr><td>E2</td><td>Kepemilikan barang illegal mentah</td><td>3000</td><td>Jail 10 bulan</td><td>Kepemilikan barang illegal mentah dikenai denda $3,000 dan penjara 10 bulan.</td></tr>
+                <tr><td>E3</td><td>Menanam/mencabut kanabis/ganja</td><td>3250</td><td>Jail 11 bulan</td><td>Melakukan penanaman atau pencabutan kanabis/daun ganja dikenai denda $3,250 dan penjara 1 bulan.</td></tr>
+                <tr><td>E4</td><td>Kepemilikan narkoba</td><td>3500</td><td>Jail 11 bulan</td><td>Kepemilikan narkoba  dikenai denda $3,500 dan penjara 11 bulan.</td></tr>
+                <tr><td>E5</td><td>Pengedaran narkoba</td><td>5000</td><td>Jail 17 bulan</td><td>Pengedaran narkoba dikenai denda $5,000 dan penjara 17 bulan.</td></tr>
+                <tr><td>E6</td><td>Produksi narkoba</td><td>6000</td><td>Jail 17 bulan</td><td>Produksi narkoba dikenai denda $6,000 dan penjara 17 bulan.</td></tr>
+                <tr><td>E7</td><td>Kepemilikan &gt;500 narkoba</td><td>20000</td><td>Jail 45 bulan</td><td>Kepemilikan narkoba lebih dari 500 satuan dikenai denda $20,000 dan penjara 45 bulan.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 6 -->
+    <div class="table-block">
+        <div id="uu6">
+        <h2>UNDANG-UNDANG NOMOR 6 TAHUN 2026 TENTANG SENJATA DAN AMUNISI</h2>
+        <table class="peperangan">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>F1</td><td>Kepemilikan senjata api ringan</td><td>3500</td><td>Jail 15 bulan</td><td>Kepemilikan senjata api ringan tanpa izin dikenai denda $3,500 dan penjara 15 bulan.</td></tr>
+                <tr><td>F2</td><td>Kepemilikan senjata api sedang</td><td>5000</td><td>Jail 19 bulan</td><td>Kepemilikan senjata api sedang tanpa izin dikenai denda $5,000 dan penjara 19 bulan.</td></tr>
+                <tr><td>F3</td><td>Kepemilikan senjata api berat</td><td>6000</td><td>Jail 25 bulan</td><td>Kepemilikan senjata api berat tanpa izin dikenai denda $6,000 dan penjara 25 bulan.</td></tr>
+                <tr><td>F4</td><td>Pengedaran senjata ilegal</td><td>7500</td><td>Jail 21 bulan</td><td>Pengedaran senjata api/amunisi ilegal dikenai denda $7,500 dan penjara 21 bulan.</td></tr>
+                <tr><td>F5</td><td>Produksi senjata ilegal</td><td>9000</td><td>Jail 25 bulan</td><td>Produksi/merakit senjata ilegal dikenai denda $9,000 dan penjara 25 bulan.</td></tr>
+                <tr><td>F6</td><td>Kepemilikan amunisi 1-50 clip</td><td>2000</td><td>Jail 15 bulan</td><td>Kepemilikan amunisi 1-50 clip tanpa izin dikenai denda $2,000 dan penjara 15 bulan.</td></tr>
+                <tr><td>F7</td><td>Kepemilikan amunisi &gt;200 clip</td><td>6000</td><td>Jail 25 bulan</td><td>Kepemilikan amunisi lebih dari 200 clip tanpa izin dikenai denda $6,000 dan penjara 25 bulan.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 7 -->
+    <div class="table-block">
+        <div id="uu7">
+        <h2>UNDANG-UNDANG NOMOR 7 TAHUN 2026 TENTANG TINDAK PIDANA PENEMBAKAN DAN PEPERANGAN</h2>
+        <table class="peperangan">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>G1</td><td>Penembakan terhadap warga</td><td>3750</td><td>Jail 12 bulan</td><td>Barang siapa yang melakukan penembakan terhadap warga maka akan dikenakan denda $4,750 dan penjara 12 bulan.</td></tr>
+                <tr><td>G2</td><td>Penembakan terhadap instansi</td><td>4250</td><td>Jail 15 bulan</td><td>Barang siapa yang melakukan penembakan terhadap instansi maka akan dikenakan denda $4,250 dan penjara 15 bulan.</td></tr>
+                <tr><td>G3</td><td>Penembakan di tempat umum</td><td>4500</td><td>Jail 15 bulan</td><td>Penembakan di tempat umum dikenakan denda $4,500 dan penjara 15 bulan.</td></tr>
+                <tr><td>G4</td><td>Peperangan</td><td>7000</td><td>Jail 25 bulan</td><td>Barang siapa yang melakukan atau terlibat dalam Peperangan maka akan dikenakan denda $7,000 dan penjara 25 bulan.</td></tr>
+                <tr><td>G5</td><td>Menggunakan granat/bom tanpa izin</td><td>9000</td><td>Jail 25 bulan</td><td>Menggunakan granat/bom tanpa izin dikenakan denda $9,000 dan penjara 25 bulan.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Big Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 8 -->
+<div class="table-block">
+    <div id="uu8">
+    <h2>UNDANG-UNDANG NOMOR 8 TAHUN 2026 TENTANG TINDAK PIDANA KORUPSI</h2>
+    <table class="tipikor">
+        <thead>
+            <tr>
+                <th>Pasal</th>
+                <th>Jenis Pelanggaran</th>
+                <th>Denda ($)</th>
+                <th>Hukuman</th>
+                <th>Isi/Bunyi Pasal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>H1</td>
+                <td>Korupsi swasta</td>
+                <td>50000</td>
+                <td>Jail 100 bulan + sita aset</td>
+                <td>Korupsi di sektor swasta dikenakan denda $50,000, penjara 100 bulan, dan aset disita negara.</td>
+            </tr>
+            <tr>
+                <td>H2</td>
+                <td>Korupsi pemerintah</td>
+                <td>hukuman mati</td>
+                <td>hukuman mati</td>
+                <td>Pegawai atau pejabat pemerintah korupsi dikenakan hukuman mati.</td>
+            </tr>
+            <tr>
+                <td>H3</td>
+                <td>Penyuapan aktif (memberi suap)</td>
+                <td>30000</td>
+                <td>Jail 50 bulan</td>
+                <td>Setiap orang yang memberi uang/barang/jasa kepada pegawai atau pejabat untuk mempengaruhi keputusan atau tindakan, dikenakan denda $30,000 dan penjara 50 bulan.</td>
+            </tr>
+            <tr>
+                <td>H4</td>
+                <td>Penyuapan pasif (menerima suap)</td>
+                <td>40000</td>
+                <td>Jail 70 bulan atay hukuman mati</td>
+                <td>Pegawai atau pejabat yang menerima uang/barang/jasa untuk mengubah atau memilih keputusan/tindakan, dikenakan denda $40,000 dan penjara 70 bulan atau hukuman mati.</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+    </div>
+</div>
+
+    <!-- UU 9 -->
+    <div class="table-block">
+        <div id="uu9">
+        <h2>UNDANG-UNDANG NOMOR 9 TAHUN 2026 TENTANG TINDAK PIDANA TERORISME</h2>
+        <table class="terorisme">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>I1</td><td>Terorisme, bom massal, dll</td><td>75000</td><td>Penjara 100 Bulan atau Hukuman Mati</td><td>Setiap orang yang melakukan tindakan terorisme, peledakan bom massal, atau tindakan yang mengancam keselamatan negara dan masyarakat akan dikenai denda $75,000 dan dijatuhi penjara 100 bulan atau hukuman mati.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 10 -->
+    <div class="table-block">
+        <div id="uu10">
+        <h2>UNDANG-UNDANG NOMOR 10 TAHUN 2026 TENTANG TINDAK PIDANA PENYANDERAAN</h2>
+        <table class="penyanderaan">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>J1</td><td>Penyanderaan</td><td>12500</td><td>Jail 50 bulan</td><td>Setiap orang yang dengan sengaja melakukan penyanderaan terhadap orang lain dengan maksud menuntut tebusan, memaksa pihak lain, atau menekan pemerintah, diancam dengan pidana penjara paling lama 50 bulan dan denda $12,500.</td></tr>
+                <tr><td>J2</td><td>Penyanderaan dengan kekerasan/ancaman terhadap nyawa</td><td>17500</td><td>Jail 55 bulan</td><td>Jika penyanderaan dilakukan dengan disertai kekerasan, ancaman membahayakan nyawa, atau menyebabkan korban luka berat/kematian, pelaku diancam pidana penjara paling lama 55 bulan dan denda $17,500.</td></tr>
+                <tr><td>J3</td><td>Perantara/Komplotan Penyanderaan</td><td>7500</td><td>Jail 40 bulan</td><td>Setiap orang yang membantu, mengatur, atau menjadi perantara dalam tindakan penyanderaan, diancam pidana penjara paling lama 40 bulan dan denda $7,500.</td></tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- UU 11 -->
+    <div class="table-block">
+        <div id="uu11">
+        <h2>UNDANG-UNDANG NOMOR 11 TAHUN 2026 TENTANG INFORMASI DAN TRANSAKSI ELEKTRONIK (ITE)</h2>
+        <table class="ite">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Jenis Pelanggaran</th>
+                    <th>Denda ($)</th>
+                    <th>Hukuman</th>
+                    <th>Isi/Bunyi Pasal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ITE1</td>
+                    <td>Penyebaran Informasi Palsu/Hoax</td>
+                    <td>2500</td>
+                    <td>Jail 5 Bulan</td>
+                    <td>Setiap orang yang dengan sengaja menyebarkan berita bohong, fitnah, atau informasi palsu melalui media elektronik diancam hukuman penjara paling lama 5 bulan dan denda $2,500.</td>
+                </tr>
+                <tr>
+                    <td>ITE2</td>
+                    <td>Penghinaan & Pencemaran Nama Baik</td>
+                    <td>1500</td>
+                    <td>Jail 3 Bulan</td>
+                    <td>Setiap orang yang melakukan penghinaan atau pencemaran nama baik melalui media elektronik diancam hukuman penjara paling lama 3 bulan dan denda $1,500.</td>
+                </tr>
+                <tr>
+                    <td>ITE3</td>
+                    <td>Penyalahgunaan Data Pribadi</td>
+                    <td>2000</td>
+                    <td>Jail 5 Bulan</td>
+                    <td>Setiap orang yang menyalahgunakan data pribadi orang lain tanpa izin melalui media elektronik diancam hukuman penjara paling lama 5 bulan dan denda $2,000.</td>
+                </tr>
+                <tr>
+                    <td>ITE4</td>
+                    <td>Penipuan Online</td>
+                    <td>3000</td>
+                    <td>Jail 8 Bulan</td>
+                    <td>Setiap orang yang melakukan penipuan dengan menggunakan media elektronik diancam hukuman penjara paling lama 8 hari dan denda $3,000.</td>
+                </tr>
+                <tr>
+                    <td>ITE5</td>
+                    <td>Penyebaran Konten Terlarang</td>
+                    <td>3500</td>
+                    <td>Jail 6 Bulan</td>
+                    <td>Setiap orang yang menyebarkan konten terlarang (seperti pornografi, perjudian, SARA, dan kekerasan ekstrem) melalui media elektronik diancam hukuman penjara paling lama 6 hari dan denda $3,500.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="copyright-text-bawah">Copyright © Kotaku Police Departemen - Dilarang Copy Paste - Ottibonynyo Mods</div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+<div class="fab-container">
+  <button class="fab-btn" onclick="toggleSelector()">
+    <span class="material-icons">search</span>
+  </button>
+  <div class="fab-selector" id="fabSelector">
+    <ul>
+      <li onclick="scrollToUU('uu1')">
+        <span class="material-icons">directions_car</span> LLAJ
+      </li>
+      <li onclick="scrollToUU('uu2')">
+        <span class="material-icons">gavel</span> PIDANA UMUM
+      </li>
+      <li onclick="scrollToUU('uu3')">
+        <span class="material-icons">home</span> PIDANA PROPERTI
+      </li>
+      <li onclick="scrollToUU('uu4')">
+        <span class="material-icons">local_bar</span> MIRAS
+      </li>
+      <li onclick="scrollToUU('uu5')">
+        <span class="material-icons">medication</span> NARKOTIKA
+      </li>
+      <li onclick="scrollToUU('uu6')">
+        <span class="material-icons">security</span> SENJATA & AMUNISI
+      </li>
+      <li onclick="scrollToUU('uu7')">
+        <span class="material-icons">whatshot</span> PENEMBAKAN & PEPERANGAN
+      </li>
+      <li onclick="scrollToUU('uu8')">
+        <span class="material-icons">money_off</span> KORUPSI
+      </li>
+      <li onclick="scrollToUU('uu9')">
+        <span class="material-icons">dangerous</span> TERORISME
+      </li>
+      <li onclick="scrollToUU('uu10')">
+        <span class="material-icons">warning</span> PENYANDERAAN
+      </li>
+      <li onclick="scrollToUU('uu11')">
+        <span class="material-icons">language</span> ITE
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<h1> KITAB UNDANG UNDANG HUKUM PIDANA KOTAKU AMANDEMEN KE 6 TAHUN 2026</h1>
+
+<!-- BATAS MAKSIMAL PENJARA dan KOMBINASI, TABEL -->
+<div class="table-block">
+  <h3>Batas Maksimal Penjara per Jenis UU</h3>
+  <table class="batas-maximal">
+    <thead>
+      <tr>
+        <th>Jenis UU</th>
+        <th>Batas Maksimal Penjara</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Lalu Lintas dan Angkutan Jalan</td><td>10 bulan</td></tr>
+      <tr><td>Pidana Umum</td><td>80 bulan</td></tr>
+      <tr><td>Pidana Properti</td><td>85 bulan</td></tr>
+      <tr><td>Minuman Keras dan Zat Beralkohol</td><td>35 bulan</td></tr>
+      <tr><td>Narkotika dan Barang Illegal</td><td>90 bulan</td></tr>
+      <tr><td>Senjata dan Amunisi</td><td>100 bulan</td></tr>
+      <tr><td>Peperangan dan Penembakan</td><td>120 bulan</td></tr>
+      <tr><td>Korupsi</td><td>200 bulan <br><i>(atau hukuman mati jika pasal mengancam mati)</i></td></tr>
+      <tr><td>Terorisme</td><td>200 bulan <br><i>(atau hukuman mati jika pasal mengancam mati)</i></td></tr>
+      <tr><td>Penyanderaan</td><td>140 bulan</td></tr>
+      <tr><td>ITE</td><td>30 bulan</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="table-block">
+  <h3>Batas Maksimal Kombinasi Jenis UU</h3>
+  <table class="batas-maximal">
+    <thead>
+      <tr>
+        <th>Kombinasi Jenis UU</th>
+        <th>Batas Maksimal Penjara</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>2 Jenis UU berbeda</td><td>100 bulan</td></tr>
+      <tr><td>3 Jenis UU berbeda</td><td>150 bulan</td></tr>
+      <tr><td>4 Jenis UU berbeda</td><td>180 bulan</td></tr>
+      <tr><td>5 Jenis UU berbeda</td><td>200 bulan</td></tr>
+      <tr><td>6 Jenis UU berbeda</td><td>230 bulan</td></tr>
+      <tr><td>7 Jenis UU berbeda</td><td>250 bulan</td></tr>
+      <tr><td>8 Jenis UU berbeda</td><td>300 bulan</td></tr>
+      <tr><td>Ada pasal ancaman hukuman mati</td><td>Hukuman mati (tanpa batas bulan)</td></tr>
+    </tbody>
+  </table>
+  <ul style="margin-top:10px;">
+    <li>Batas maksimal berlaku untuk total kumulasi pidana penjara, meskipun jumlah pelanggaran lebih banyak dari satu dalam satu jenis UU.</li>
+    <li>Batas maksimal kombinasi diambil berdasarkan jumlah jenis UU berbeda yang dilanggar, bukan jumlah kasusnya.</li>
+    <li>Denda selalu dijumlahkan sesuai pasal yang dilanggar.</li>
+    <li><b>Contoh:</b>
+      <ul>
+        <li>Melanggar 3 pasal pada UU Pidana Umum sekaligus → maksimal penjara 00 bulan.</li>
+        <li>Melanggar UU Narkotika dan Properti → maksimal penjara 100 bulan.</li>
+        <li>Melanggar UU Properti, Senjata, dan Penembakan maksimal penjara 200 bulan .</li>
+        <li>Aturan ini tidak berlaku bagi UU Nomor 8 dan UU Nomor 9.</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<!-- KLASIFIKASI UU TABEL -->
+<div class="table-block">
+  <h3>Klasifikasi UU Berdasarkan Tingkat</h3>
+  <table class="klasifikasi-uu">
+    <thead>
+      <tr>
+        <th>Kategori</th>
+        <th>UU/Pasal</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ringan</td>
+        <td>UU 1/2025 (LLAJ), UU 11/2025 (ITE)</td>
+        <td>Semua pelanggaran pada UU ini masuk kategori ringan.</td>
+      </tr>
+      <tr>
+        <td>Sedang</td>
+        <td>UU 2/2025 (kecuali B25), UU 4/2025, UU 3/2025, UU 5/2025 (kecuali E7), UU 6/2025, UU 7/2025 (kecuali G2,G4,G5)</td>
+        <td>Lihat detail pengecualian di bawah tabel.</td>
+      </tr>
+      <tr>
+        <td>Berat</td>
+        <td>UU 2/2025 (B25), UU 5/2025 (E7), UU 7/2025 (G2,G4,G5), UU 8/2025, UU 9/2025, UU 10/2025</td>
+        <td>Pasal tertentu dan semua pelanggaran UU 8,9,10 masuk kategori berat.</td>
+      </tr>
+    </tbody>
+  </table>
+  <ul style="margin-top:10px;">
+    <li><b>Catatan:</b></li>
+    <li>UU 5/2025 hanya kategori berat untuk Pasal E7, lain sedang.</li>
+    <li>UU 7/2025 hanya kategori berat untuk Pasal G2, G4, G5, lain sedang.</li>
+    <li>UU 2/2025 hanya kategori berat untuk Pasal B25, lain sedang.</li>
+    <li>Pelanggaran massal/kerugian besar bisa dikategorikan berat walau tidak dicantumkan khusus.</li>
+    <li>Klasifikasi ini untuk batas maksimum hukuman, pemberat, dan remisi.</li>
+  </ul>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+    document.getElementById('download').addEventListener('click', function () {
+        var content = document.getElementById('tabel-pasal').innerHTML;
+        var htmlFile = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>UU KOTAKU REVISI</title></head><body>' + content + '</body></html>';
+        var blob = new Blob([htmlFile], {type: "text/html"});
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "klasifikasi_pasal_gta_rp.html";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    document.getElementById('download-img').addEventListener('click', function () {
+        const blocks = document.querySelectorAll('.table-block');
+        blocks.forEach((block, idx) => {
+            const h2 = block.querySelector('h2');
+            let filename = h2 ? h2.textContent.trim() : 'tabel_' + (idx+1);
+            filename = filename.toLowerCase()
+                .replace(/[^a-z0-9]+/g, '_')
+                .replace(/^_|_$/g, '')
+                .replace(/_+/g, '_');
+            html2canvas(block, {scale: 2, useCORS: true}).then(function(canvas) {
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = filename + '.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    });
+
+    // FITUR PENCARIAN
+    const searchBox = document.getElementById('search-box');
+    const clearBtn = document.getElementById('clear-search');
+    const tabelPasal = document.getElementById('tabel-pasal');
+    function removeHighlights() {
+        tabelPasal.querySelectorAll('.highlight').forEach(el => {
+            el.innerHTML = el.textContent;
+            el.classList.remove('highlight');
+        });
+    }
+    function highlightText(element, keyword) {
+        if (!keyword) return;
+        const regex = new RegExp('(' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        element.innerHTML = element.textContent.replace(regex, '<span class="highlight">$1</span>');
+    }
+    function searchPasal() {
+        const keyword = searchBox.value.trim().toLowerCase();
+        removeHighlights();
+        const tableBlocks = Array.from(document.querySelectorAll('.table-block'));
+        tableBlocks.forEach(block => {
+            let blockVisible = false;
+            const trs = block.querySelectorAll('tbody tr');
+            trs.forEach(tr => {
+                let rowText = tr.textContent.toLowerCase();
+                if (!keyword || rowText.includes(keyword)) {
+                    tr.style.display = '';
+                    Array.from(tr.children).forEach(td => highlightText(td, keyword));
+                    blockVisible = true;
+                } else {
+                    tr.style.display = 'none';
+                }
+            });
+            block.style.display = (blockVisible || !keyword) ? '' : 'none';
+        });
+    }
+    searchBox.addEventListener('input', searchPasal);
+    clearBtn.addEventListener('click', function() {
+        searchBox.value = '';
+        searchPasal();
+        searchBox.focus();
+    });
+    removeHighlights();
+
+    /* selector button funciton */
+    function toggleSelector() {
+    var selector = document.getElementById('fabSelector');
+    selector.style.display = (selector.style.display === 'block') ? 'none' : 'block';
+    }
+    // Hide selector if click outside
+    document.addEventListener('click', function(event) {
+    var fab = document.querySelector('.fab-container');
+    var selector = document.getElementById('fabSelector');
+    if (!fab.contains(event.target)) {
+        selector.style.display = 'none';
+    }
+    });
+    function scrollToUU(id) {
+    var target = document.getElementById(id);
+    if (target) {
+        target.scrollIntoView({behavior: 'smooth'});
+    }
+    document.getElementById('fabSelector').style.display = 'none';
+    }
+    </script>
+</body>
+</html>
