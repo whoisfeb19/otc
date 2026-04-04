@@ -6,13 +6,16 @@
   <title>EBOOK SOP & PROSEDUR KEPOLISIAN KOTAKU</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
+    /* --- CSS DASAR & TEMA (Milikmu) --- */
     body {
       background: linear-gradient(120deg, #8fd3f4 0%, #84fab0 100%);
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
       min-height: 100vh;
       color: #222;
+      scroll-behavior: smooth; /* Tambahan: agar saat klik menu, scroll terasa halus */
     }
+
     .container {
       max-width: 940px;
       margin: 40px auto;
@@ -21,105 +24,217 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.10);
       padding: 40px 28px 32px 28px;
     }
+
     h1, h2, h3 {
       text-align: center;
       color: #176b87;
       margin-top: 0;
     }
+
     h1 { font-size: 2.2em; margin-bottom: 12px; }
-    h2 { font-size: 1.45em; margin-top: 32px; margin-bottom: 18px;}
-    h3 { font-size: 1.15em; margin-top: 24px; margin-bottom: 9px;}
+    h2 { font-size: 1.45em; margin-top: 32px; margin-bottom: 18px; border-bottom: 2px solid #f1f8fc; padding-bottom: 10px; }
+    h3 { font-size: 1.15em; margin-top: 24px; margin-bottom: 9px; color: #2d9596; }
+
     .subtitle {
       text-align: center;
       color: #555;
       font-size: 1.1em;
       margin-bottom: 24px;
     }
+
     .section {
       margin-bottom: 34px;
       padding-bottom: 12px;
       border-bottom: 1px solid #e8eaef;
     }
+
     .subsection {
       margin: 24px 0 12px 0;
+      font-weight: bold;
+      color: #176b87;
     }
+
     ul, ol {
       margin-left: 1.5em;
       margin-bottom: 1em;
     }
+
     table {
       border-collapse: collapse;
       width: 100%;
       margin: 18px 0;
-      font-size: 0.98em;
+      font-size: 0.95em;
       background: #f9fafb;
       border-radius: 8px;
       overflow: hidden;
     }
+
     th, td {
       border: 1px solid #c5e3e8;
-      padding: 8px 7px;
+      padding: 10px 8px;
       text-align: left;
     }
+
     th {
       background: #d0f0ff;
       color: #176b87;
       font-weight: bold;
     }
+
     tr:nth-child(even) td {
       background: #f1f8fc;
     }
+
     blockquote {
       background: #f6fff8;
       border-left: 4px solid #84fab0;
       margin: 12px 0;
-      padding: 9px 18px;
+      padding: 12px 18px;
       font-style: italic;
       color: #1b3e2a;
       border-radius: 7px;
     }
-    .radio-codes-table {
-      font-size: 0.95em;
-    }
-    .note { color: #176b87; background: #eafcff; border-radius: 7px; padding: 7px 14px; margin: 8px 0 13px 0; }
-    .highlight { background: #fffde7; border-left: 4px solid #ffe082; padding: 8px 12px; border-radius: 8px; margin: 9px 0 16px 0;}
-    @media (max-width:700px){
-      .container{ padding: 12px 2vw;}
-      h1{font-size:1.3em;}
-      h2{font-size:1.08em;}
-      h3{font-size:1em;}
-      th,td{font-size:0.92em;}
+
+    .note { 
+      color: #176b87; 
+      background: #eafcff; 
+      border-radius: 7px; 
+      padding: 10px 14px; 
+      margin: 12px 0; 
+      border-left: 4px solid #176b87;
     }
 
+    .highlight { 
+      background: #fffde7; 
+      border-left: 4px solid #ffe082; 
+      padding: 12px; 
+      border-radius: 8px; 
+      margin: 15px 0;
+      line-height: 1.6;
+    }
+
+    /* --- NAVIGATION & FAB (Floating Action Button) --- */
     .fab-container {
-  position: fixed;
-  right: 30px;
-  bottom: 30px;
-  z-index: 100;
+      position: fixed;
+      right: 30px;
+      bottom: 30px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px; /* Jarak antar tombol */
+    }
+
+    .fab-btn {
+      background: #4caf50; /* Warna hijau tombol home */
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+    }
+
+    .fab-btn:hover {
+      background: #388e3c;
+      transform: scale(1.1);
+    }
+
+    /* Warna khusus tombol menu buku */
+    .btn-menu {
+      background: #176b87 !important;
+    }
+    .btn-menu:hover {
+      background: #0d4c61 !important;
+    }
+
+    /* Kotak Menu Pop-up */
+.fab-menu {
+  display: none;
+  flex-direction: column;
+  background: white;
+  min-width: 220px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  margin-bottom: 5px;
+  
+  /* --- PERBAIKAN DI SINI --- */
+  max-height: 70vh;          /* Membatasi tinggi menu 70% dari tinggi layar */
+  overflow-y: auto;          /* Mengaktifkan scroll vertikal */
+  overflow-x: hidden;        /* Menghilangkan scroll horizontal */
+  /* ------------------------- */
+  
+  border: 1px solid #c5e3e8;
+  animation: fadeIn 0.3s ease;
 }
-.fab-btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  font-size: 26px;
-  cursor: pointer;
-  transition: background 0.3s;
+
+.fab-menu.show {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  outline: none;
 }
-.fab-btn:hover {
-  background: #388e3c;
+
+.fab-menu-header {
+  /* Tambahan: Agar judul tetap di atas saat di-scroll */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  
+  padding: 12px 15px;
+  font-weight: bold;
+  background: #d0f0ff;
+  color: #176b87;
+  font-size: 0.85em;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #c5e3e8;
 }
-@media (max-width: 600px) {
-  .fab-container { right: 10px; bottom: 10px; }
+
+.fab-menu a {
+  text-decoration: none;
+  color: #444;
+  padding: 12px 15px;
+  font-size: 0.9em;
+  border-bottom: 1px solid #f1f8fc;
+  transition: background 0.2s;
 }
-  </style>
+
+.fab-menu a:hover {
+  background: #f0faf2;
+  color: #176b87;
+  padding-left: 20px;
+}
+
+.fab-menu a:last-child {
+  border-bottom: none;
+}
+
+/* --- RESPONSIVE SETTINGS --- */
+@media (max-width:700px){
+  .container{ padding: 15px 4vw; margin: 20px auto; }
+  h1{ font-size: 1.5em; }
+  h2{ font-size: 1.2em; }
+  h3{ font-size: 1.1em; }
+  th, td{ font-size: 0.85em; padding: 6px; }
+  .fab-container { right: 20px; bottom: 20px; }
+  .fab-btn { width: 50px; height: 50px; }
+  
+  /* Tambahan: Batasi tinggi menu lebih kecil di HP agar tidak tertutup keyboard/layar */
+  .fab-menu { 
+    min-width: 180px; 
+    max-height: 50vh; 
+  }
+}
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 </head>
 <body>
   <div class="container">
@@ -130,7 +245,7 @@
       <b>KEPOLISIAN KOTAKU</b>
     </div>
     <div class="section">
-      <h2>BAGIAN I — PENDAHULUAN</h2>
+      <h2 id="bagian-1">BAGIAN I — PENDAHULUAN</h2>
       <h3>1.1 Latar Belakang</h3>
       <p>Penegakkan hukum dimanapun membutuhkan polisi untuk mewakili dalam menerapkan dan menjaga penerapan hukum dalam seluruh kegiatan masyarakat. Perkembangan dan perubahan akan terus berubah sesuai dengan keadaan tertentu, perubahan ini berdampak pada standar operasional prosedur yang akan terus berubah dikarenakan beberapa hal yang kurang tepat pada saat penerapan standar operasional prosedur sebelumnya.</p>
       <p><b>Electronic Book</b> dibuat dengan tujuan untuk anggota kepolisian lebih memahami mengenai SOP yang lebih kompleks dan ebook ini juga mencakup hal yang dioperasikan kepolisian ke depannya. Hal yang dioperasikan ke depannya adalah perubahan SOP dalam menangani beberapa kasus di lapangan.</p>
@@ -150,7 +265,7 @@
     </div>
 
     <div class="section">
-      <h2>BAGIAN II — DIVISI DAN UNIT KEPOLISIAN KOTAKU</h2>
+      <h2 id="bagian-2">BAGIAN II — DIVISI DAN UNIT KEPOLISIAN KOTAKU</h2>
       <h3>2.1 Daftar Divisi Kepolisian Kotaku</h3>
       <ul>
         <li><b>Unsur Pembantu Fungsi Kepala Kepolisian</b>
@@ -170,7 +285,7 @@
           </ul>
         </li>
       </ul>
-      <h3>2.2 Tugas Pokok dan Fungsi Divisi (Tupoksi)</h3>
+      <h3 id="tupoksi">2.2 Tugas Pokok dan Fungsi Divisi (Tupoksi)</h3>
       <div class="subsection"><b>A. Inspektorat Pengawasan Umum</b></div>
       <p>Itwasum merupakan devisi pembantu tugas dan fungsi Kapolku dalam menjalankan fungsi mabes yang dimana fungsi dan tugasnya yaitu membantu mengawasi kinerja seluruh anggota tanpa terkecuali melalui kedudukan tertinggi pengawas, dapat mencopot dan memilih kepala seluruh devisi melalui pertimbangan dan persetujuan Kapolku. Serta merta Itwasum merupakan devisi pengawas tertinggi.</p>
       <div class="subsection"><b>B. Internal Affairs Division</b></div>
@@ -190,8 +305,9 @@
     </div>
 
     <div class="section">
-      <h2>BAGIAN III — COMMUNICATION CODES , UNIT, & PROCEDURE</h2>
-      <h3>3.3 Kode Radio Kepolisian Kotaku</h3>
+      <h2 id="bagian-3">BAGIAN III — COMMUNICATION CODES , UNIT, & PROCEDURE</h2>
+      <h3 id="kode-radio-kotaku">3.1 Kode Radio Kepolisian Kotaku</h3>
+      <h4 id="kode-radio">1. KODE RADIO</h4>
       <p><b>*Tersangka</b>: Suspect</p>
       <table class="radio-codes-table">
         <tr>
@@ -358,20 +474,38 @@
         CODE ROBERT : Rifle Deployed — (Petugas menggunakan/meminta senjata laras panjang). </br>
       </div>
     </div>
-      <h3>Contoh Penggunaan Radio (Umum)</h3>
+
+    <h4 id="jenis-radio">2. Jenis Radio Kepolisian</h4>
+      <blockquote>
+        <b>/ro</b><br>
+        Digunakan untuk menanyakan atau berkomunikasi yang terkait ooc (out of character)<br>
+        <b>/111</b><br>
+        Digunakan untuk berkomunikasi ic (in character) selain radio voice <br><br>
+        contoh penggunaan : /110 IRJENPOL DMITRY YEWICH 10-8 DAN MEMASUKI RADIO (INI UNTUK DUTY) <br><br>
+        <b>/1122</b><br>
+        /1122 ini adalah radio departement via ketik yang digunakan untuk berkomunikasi dengan pihak medis<br><br>
+        <b>Selesai Patroli:</b><br>
+      </blockquote>
+
+      <h4 id="contoh-penggunaan-radio">3 Contoh Penggunaan Radio (Umum)</h4>
       <blockquote>
         <b>Mulai Bertugas:</b><br>
         (Pangkat) (Nama Depan) (Jajaran Satuan) Izin Masuk Radio Dan Mulai Bertugas<br>
-        Balasan: 86 8-1-3 (BANG,LET,NDAN,PAK JEND/BU JEND)<br><br>
+        Balasan: 86 8-1-3 (BANG,LET,NDAN,PAK JEND/BU JEND)<br>
+        /111 (Pangkat) (Nama Depan) (Jajaran Satuan) Izin Masuk Radio Dan Mulai Bertugas<br>
+        /111 Balasan: 86 8-1-3 (BANG,LET,NDAN,PAK JEND/BU JEND)<br><br>
         <b>Selesai Bertugas:</b><br>
-        (Pangkat) (Nama Depan) (Jajaran Satuan) Izin Keluar Dari Radio Dan Selesai Bertugas<br><br>
+        (Pangkat) (Nama Depan) (Jajaran Satuan) Izin Keluar Dari Radio Dan Selesai Bertugas<br>
+        /111 (Pangkat) (Nama Depan) (Jajaran Satuan) Izin Keluar Dari Radio Dan Selesai Bertugas<br><br>
         <b>Memulai Patroli:</b><br>
-        (Callsign) Izin Untuk Melakukan Giat Patroli Di Daerah (daerah tujuan)<br><br>
+        (Callsign) Izin Untuk Melakukan Giat Patroli Di Daerah (daerah tujuan)<br>
+        /111 (Callsign) Izin Untuk Melakukan Giat Patroli Di Daerah (daerah tujuan)<br><br>
         <b>Selesai Patroli:</b><br>
         (Callsing) Izin Kembali Ke Komando Setelah Patroli<br>
+        /111 (Callsing) Izin Kembali Ke Komando Setelah Patroli<br>
       </blockquote>
 
-      <h3>Jajaran Divisi</h3>
+      <h4 id="jajaran-divisi">4. Jajaran Divisi</h4>
       <blockquote>
         <b>Jajaran 1 : KORPS LALU LINTAS</b><br>
         <b>Jajaran 2 : KORPS SAMAPTA BHAYANGKARA</b><br>
@@ -383,7 +517,8 @@
     
 
     <div class="section">
-      <h3>3.2 Standar Operasional Prosedur Kendaraan, Callsign, dan Uniform Kepolisian</h3>
+      <h3 id="sop-kendaraan-callsign-uniform">3.2 Standar Operasional Prosedur Kendaraan, Callsign, dan Uniform Kepolisian</h3>
+      <h4 id="sop-kendaraan">1. Kendaraan</h4>
       <div class="highlight">
         <b>KENDARAAN DINAS SATKER LANTAS:</b> LSPD, Police Ranger, HPV1000, Bullet, Buffalo<br>
         <b>KENDARAAN DINAS SATKER SABHARA:</b> Sultan, Sanchez, Yosemite,  Turismo<br>
@@ -393,7 +528,7 @@
       </div>
 
       
-      <h3>High Speed Unit</h3>
+      <h4 id="sop-highspeedunit">2. High Speed Unit</h4>
       <blockquote>
         <b>HIGH SPEED UNIT SATKER LANTAS:</b> Bullet, Buffalo<br>
         <b>HIGH SPEED UNIT SATKER SABHARA:</b> Turismo<br>
@@ -402,8 +537,10 @@
         <b>HIGH SPEED UNIT SATKER IAD:</b> Infernus </br>
       </blockquote>
       <div class="note">Catatan: Penggunaan High Speed Unit hanya boleh digunakan oleh Perwira Tinggi dan Petinggi Divisi Sesuai dengan unit.</div>
+      
+      
       <div class="note">Catatan: Utamakan unit basic, unit Sultan maksimal 4 unit aktif dalam kota, lainnya sesuai kebutuhan lapangan dan harus seizin perwira.</div>
-      <h3>Callsign Divisi</h3>
+      <h4 id="sop-callsign">3. Callsign Divisi</h4>
       <blockquote>
         <b>HWP      : KORPS LALU LINTAS</b><br>
         <b>TURJAWALI: KORPS SAMAPTA BHAYANGKARA</b><br>
@@ -416,7 +553,8 @@
         <b>TURJAWALI  :</b>UNIT TURJAWALI (NOMOR CALLSIGN KALIAN)</br>
         <b>SWAT  :</b>UNIT SWAT (NOMOR CALLSIGN KALIAN)</br>
       </blockquote>
-      <h3>Uniform</h3>
+
+      <h4 id="sop-uniform">5. Uniform</h4>
       <blockquote>
         <b>KOPRS LALU LINTAS : lapd1 (280) , lapdna (300), lapdm1 (284)  </b><br>
         <b>KORPS SAMAPTA BHAYANGKARA: lvpd1 (282)</b><br>
@@ -425,15 +563,16 @@
       </blockquote>
     </div>
     <div class="section">
-      <h3>3.3 Standar Operasional Prosedur Persenjataan dan Perlengkapan</h3>
+      <h3 id="sop-senjata">3.3 Standar Operasional Prosedur Persenjataan dan Perlengkapan</h3>
       <ul>
         <li><b>Sabhara/Lantas/Reserse:</b> Desert Eagle (Wajib), MP5, Shotgun, M4, Reguler Armour</li>
         <li><b>Brimob:</b> Desert Eagle (Wajib), M4, Combat Shotgun, Sniper, Reguler Armour</li>
       </ul>
       <div class="note">Perwira Tinggi dapat mengakses seluruh senjata sesuai kebutuhan (tanpa melanggar aturan).</div>
     </div>
+
     <div class="section">
-      <h3>3.4 Standar Operasional Prosedur Penanganan Perampokan</h3>
+      <h3 id="sop-perampokan">3.4 Standar Operasional Prosedur Penanganan Perampokan</h3>
       <ol>
         <li>Perampokan warung adalah tupoksi divisi BRIMOB dan dibackup oleh divisi SABHARA serta LANTAS.</li>
         <li>Ditangani oleh 6 anggota, beberapa anggota tambahan untuk perimeter oleh Sabhara.</li>
@@ -449,7 +588,7 @@
       </ol>
     </div>
     <div class="section">
-      <h3>3.5 SOP Penyanderaan</h3>
+      <h3 id="sop-penyanderaan">3.5 SOP Penyanderaan</h3>
       <ol>
         <li>Tupoksi BRIMOB, dibackup SABHARA & LANTAS.</li>
         <li>Seluruh anggota standby untuk penanganan, beberapa anggota untuk perimeter.</li>
@@ -461,12 +600,12 @@
       </ol>
     </div>
     <div class="section">
-      <h3>3.6 Skala Radius Perimeter</h3>
+      <h3 id="radius-parimeter">3.6 Skala Radius Perimeter</h3>
       <p>Radius perimeter membatasi wilayah tertentu sebagai area larangan bagi warga demi keamanan. Radius: 1 BLOK wilayah penanganan (1 pertigaan/perempatan jalan besar, atau 500ft dari TKP).</p>
       <blockquote><b>Kuning:</b> Area perimeter, <b>Merah:</b> Titik perampokan/situasi</blockquote>
     </div>
     <div class="section">
-      <h3>3.7 SOP Pengejaran & Carsteal</h3>
+      <h3 id="pengejaran-carsteal">3.7 SOP Pengejaran & Carsteal</h3>
       <p>Pengejaran suspect melibatkan kendaraan darat/laut oleh kepolisian, berdampak pada keamanan publik. Susunan kendaraan: 3 motor pencari visual, mobil untuk P.I.T/Intersafe, 1 helikopter sesuai operasi.</p>
       <ol>
         <li>Object pengejaran ditentukan komando pusat.</li>
@@ -479,11 +618,11 @@
       </ol>
     </div>
     <div class="section">
-      <h3>3.8 SOP Pursuit Intervention Technique (P.I.T)</h3>
+      <h3 id="pit">3.8 SOP Pursuit Intervention Technique (P.I.T)</h3>
       <p>Manuver PIT: taktik pengejaran memaksa mobil melarikan diri untuk berbelok tiba-tiba, menyebabkan kehilangan kendali dan berputar. Mekanisme PIT mengikuti SOP pengejaran.</p>
     </div>
     <div class="section">
-      <h3>3.9 SOP Traffic Stop</h3>
+      <h3 id="traffic-stop">3.9 SOP Traffic Stop</h3>
       <ol>
         <li>Anggota meminta pengemudi berhenti di bahu kanan jalan.</li>
         <li>Pengemudi diminta mematikan kendaraan dan tetap di dalam mobil, kaca terbuka.</li>
@@ -495,7 +634,7 @@
       </ol>
     </div>
     <div class="section">
-      <h3>3.10 SOP Felony Stop</h3>
+      <h3 id="felony-stop">3.10 SOP Felony Stop</h3>
       <ol>
         <li>Anggota meminta berhenti di bahu kanan jalan.</li>
         <li>Pengemudi diminta matikan kendaraan dan buang kunci lewat jendela.</li>
@@ -580,10 +719,55 @@
       <b>&copy; 2025 Kepolisian Kotaku</b> — Ebook SOP & Prosedur
     </footer>
     <div class="fab-container">
-  <button class="fab-btn" onclick="window.location.href='../index.html'" title="Kembali ke Beranda" aria-label="Kembali ke Beranda">
-    <span class="material-icons">home</span>
-  </button>
-</div>
+      <div id="quickNavMenu" class="fab-menu">
+        <div class="fab-menu-header">NAVIGASI CEPAT</div>
+        <a href="#top">Atas / Beranda</a>
+        <a href="#bagian-1">I. Pendahuluan</a>
+        <a href="#bagian-2">II. Divisi & Unit</a>
+        <a href="#bagian-3">III. COMMUNICATION CODES, UNIT, & PROCEDURES</a>
+        <a href="#kode-radio-kotaku">3.1 Kode Radio Kepolisian Kotaku</a>
+        <a href="#kode-radio">1. Kode Radio</h4>
+        <a href="#jenis-radio">2. Jenis Radio Kepolisian</a>
+        <a href="#contoh-penggunaan-radio">3. Contoh Penggunaan Radio (Umum)</a>
+        <a href="#jajaran-divisi">4. Jajaran Divisi</a>
+        <a href="#sop-kendaraan-callsign-uniform">3.2 SOP KENDARAN, CALLSIGN, UNIFORM</a>
+        <a href="#sop-kendaraan">1. SOP Kendaraan</a>
+        <a href="#sop-highspeedunit"> 2. SOP High Speed Unit</a>
+        <a href="#sop-callsign">3. SOP Callsign</a>
+        <a href="#sop-uniform">4. SOP Uniform</a>
+        <a href="#persenjataan">SOP Senjata</a>
+        <a href="#sop-perampokan">SOP Perampokan</a>
+        <a href="#sop-penyanderaan">SOP Penyanderaan</a>
+      </div>
+
+      <button class="fab-btn btn-menu" onclick="toggleMenu()" title="Daftar Isi Cepat">
+        <span class="material-icons">menu_book</span>
+      </button>
+    </div>
   </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('quickNavMenu');
+      menu.classList.toggle('show');
+    }
+
+    // Klik di luar menu untuk menutup secara otomatis
+    window.onclick = function(event) {
+      if (!event.target.closest('.fab-container')) {
+        const menu = document.getElementById('quickNavMenu');
+        if (menu && menu.classList.contains('show')) {
+          menu.classList.remove('show');
+        }
+      }
+    }
+
+    // Tutup menu setelah klik salah satu link (agar tidak menutupi layar)
+    document.querySelectorAll('.fab-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('quickNavMenu').classList.remove('show');
+      });
+    });
+  </script>
 </body>
 </html>
